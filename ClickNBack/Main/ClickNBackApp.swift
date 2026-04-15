@@ -6,7 +6,7 @@ import SwiftUI
 struct ClickNBackApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HomeScreen()
         }
     }
 }
