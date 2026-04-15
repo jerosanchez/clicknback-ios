@@ -57,15 +57,15 @@ check-swiftlint:
 	}
 
 install: check-homebrew
-	@echo "$(COLOR_BLUE)Installing code quality tools...$(COLOR_RESET)"
-	brew install swiftformat swiftlint
+	@echo "$(COLOR_BLUE)Installing dev tools...$(COLOR_RESET)"
+	brew install swiftformat swiftlint tuist
 	@$(MAKE) generate
 	@echo ""
 	@echo "$(COLOR_GREEN)✓ Setup complete. Run 'make open' to open the project in Xcode.$(COLOR_RESET)"
 
 generate: check-tuist
 	@echo "$(COLOR_BLUE)Generating Xcode project with Tuist...$(COLOR_RESET)"
-	tuist generate
+	tuist generate --no-open
 	@echo "$(COLOR_GREEN)✓ Project generated successfully$(COLOR_RESET)"
 
 # ============================================================================
@@ -135,13 +135,6 @@ format: check-swiftformat
 	@echo "$(COLOR_GREEN)✓ Code formatted$(COLOR_RESET)"
 
 lint: check-swiftlint
-	@echo "$(COLOR_BLUE)Running SwiftLint...$(COLOR_RESET)"
-	swiftlint lint --quiet ClickNBack/ ClickNBackTests/ ClickNBackUITests/
-		echo "$(COLOR_YELLOW)swiftlint not installed$(COLOR_RESET)"; \
-		echo ""; \
-		echo "Install via: $(COLOR_YELLOW)brew install swiftlint$(COLOR_RESET)"; \
-		exit 1; \
-	fi
 	@echo "$(COLOR_BLUE)Running SwiftLint...$(COLOR_RESET)"
 	swiftlint lint --quiet ClickNBack/ ClickNBackTests/ ClickNBackUITests/
 	@echo "$(COLOR_GREEN)✓ SwiftLint completed$(COLOR_RESET)"

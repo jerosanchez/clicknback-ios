@@ -1,5 +1,6 @@
-![ClickNBack banner](/docs/clicknback-bannerbg-white.png)
+![ClickNBack banner](/docs/clicknback-banner-bg-white.png)
 
+[![CI](https://github.com/jerosanchez/clicknback-ios/actions/workflows/ci.yml/badge.svg)](https://github.com/jerosanchez/clicknback-ios/actions/workflows/ci.yml)
 [![Xcode](https://img.shields.io/badge/Xcode-26.4%2B-blue?logo=xcode)](https://developer.apple.com/xcode/)
 [![Swift](https://img.shields.io/badge/Swift-6.0%2B-orange?logo=swift)](https://swift.org)
 
