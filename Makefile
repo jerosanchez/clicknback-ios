@@ -162,7 +162,7 @@ regenerate: check-tuist clean-artifacts
 	rm -rf ClickNBack.xcodeproj/
 	rm -rf ClickNBack.xcworkspace/
 	@echo "$(COLOR_BLUE)Regenerating from Tuist...$(COLOR_RESET)"
-	tuist generate
+	tuist generate --no-open
 	@echo "$(COLOR_GREEN)✓ Project regenerated$(COLOR_RESET)"
 
 clean-all: clean-artifacts clean-cache regenerate

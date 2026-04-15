@@ -14,7 +14,14 @@ let project = Project(
                 "UILaunchScreen": .dictionary([:]),
             ]),
             sources: "ClickNBack/**",
-            resources: ["ClickNBack/Assets.xcassets/**", "ClickNBack/**/*.xcstrings"]
+            resources: ["ClickNBack/Assets.xcassets/**", "ClickNBack/**/*.xcstrings"],
+            settings: .settings(
+                base: [
+                    "SWIFT_VERSION": "6.0",
+                    "SWIFT_DEFAULT_ACTOR_ISOLATION": "MainActor",
+                    "SWIFT_STRICT_CONCURRENCY_ENABLED": "COMPLETE",
+                ]
+            )
         ),
         .target(
             name: "ClickNBackTests",
@@ -25,7 +32,14 @@ let project = Project(
             sources: "ClickNBackTests/**",
             dependencies: [
                 .target(name: "ClickNBack"),
-            ]
+            ],
+            settings: .settings(
+                base: [
+                    "SWIFT_VERSION": "6.0",
+                    "SWIFT_DEFAULT_ACTOR_ISOLATION": "MainActor",
+                    "SWIFT_STRICT_CONCURRENCY_ENABLED": "COMPLETE",
+                ]
+            )
         ),
         .target(
             name: "ClickNBackUITests",
@@ -36,7 +50,14 @@ let project = Project(
             sources: "ClickNBackUITests/**",
             dependencies: [
                 .target(name: "ClickNBack"),
-            ]
+            ],
+            settings: .settings(
+                base: [
+                    "SWIFT_VERSION": "6.0",
+                    "SWIFT_DEFAULT_ACTOR_ISOLATION": "MainActor", 
+                    "SWIFT_STRICT_CONCURRENCY_ENABLED": "COMPLETE",
+                ]
+            )
         ),
     ],
     schemes: [
