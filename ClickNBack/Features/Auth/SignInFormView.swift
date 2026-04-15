@@ -1,0 +1,86 @@
+//
+
+import SwiftUI
+
+struct SignInFormView: View {
+    let viewModel: SignInViewModel
+
+    var body: some View {
+        VStack {
+            AppIcons.inlineBigIcon(AppIcons.authHeadingIcon)
+            formFields()
+            signupButton()
+        }
+        .padding(AppSpacing.medium)
+    }
+
+    private func formFields() -> some View {
+        VStack(spacing: AppSpacing.medium) {
+            emailField()
+            passwordField()
+        }
+        .padding(.vertical, AppSpacing.medium)
+    }
+
+    private func emailField() -> some View {
+        TextField("Email", text: Binding(
+            get: { viewModel.email },
+            set: { viewModel.email = $0 }
+        ))
+        .keyboardType(.emailAddress)
+        .autocapitalization(.none)
+        .padding()
+        .padding(.leading, AppSpacing.large)
+        .background(AppColors.Background.secondary)
+        .cornerRadius(AppDimensions.CornerRadius.medium)
+        .overlay(
+            AppIcons.formFieldIcon(AppIcons.emailField)
+        )
+    }
+
+    private func passwordField() -> some View {
+        SecureField("Password", text: Binding(
+            get: { viewModel.password },
+            set: { viewModel.password = $0 }
+        ))
+        .padding()
+        .padding(.leading, AppSpacing.large)
+        .background(AppColors.Background.secondary)
+        .cornerRadius(AppDimensions.CornerRadius.medium)
+        .overlay(
+            AppIcons.formFieldIcon(AppIcons.passwordField)
+        )
+    }
+
+    private func signupButton() -> some View {
+        Button(
+            action: {
+                // TODO: Implement sign-in logic
+            },
+            label: {
+                HStack {
+                    Image(systemName: AppIcons.signinButton)
+                    Text("Sign In")
+                        .font(AppTypography.Label.large)
+                        .fontWeight(.semibold)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(AppSpacing.medium)
+                .background(AppColors.Semantic.primary)
+                .foregroundColor(.white)
+                .cornerRadius(AppDimensions.CornerRadius.medium)
+            }
+        )
+        .padding(.top, AppSpacing.compact)
+    }
+
+    private var isFormValid: Bool {
+        !viewModel.email.trimmingCharacters(in: .whitespaces).isEmpty &&
+            !viewModel.password.isEmpty
+    }
+}
+
+#Preview {
+    SignInFormView(viewModel: SignInViewModel())
+}
+
