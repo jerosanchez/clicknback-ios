@@ -155,3 +155,17 @@ private final class MockKeyValueStorage: KeyValueStorage {
 }
 
 private struct MockStorageError: Error {}
+
+private extension AuthTokens {
+    init(accessToken: String, refreshToken: String) {
+        self.accessToken = accessToken
+        self.refreshToken = refreshToken
+    }
+}
+
+private extension LoginCredentials {
+    init(email: String, password: String) {
+        self.email = email
+        self.password = password
+    }
+}

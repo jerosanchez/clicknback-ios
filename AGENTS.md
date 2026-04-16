@@ -54,6 +54,15 @@ Extract SUT instantiation to a private factory method with default values:
 - Place mock implementations in a `// MARK: - Mocks` section at the very end
 - This creates a clear visual hierarchy: tests → helpers → mocks
 
+### Test File Placement
+
+Test files must mirror the production code structure under `*Tests/` folders:
+- **Data layer tests:** `ClickNBackTests/Data/*` — test use cases, repositories, and models
+- **Infra layer tests:** `ClickNBackTests/Infra/Repositories/` — test remote/local repositories
+- **Feature layer tests:** `ClickNBackTests/Features/*/` — test screens and view models
+- Test file naming: `<ClassName>+<MethodName>Tests.swift` or `<ClassName>Tests.swift`
+- Example: Repository login method tested in `ClickNBackTests/Infra/Repositories/Auth/RemoteAuthRepositoryLoginTests.swift`
+
 ### Assertion Best Practices
 
 - Use **`#expect()`** from Swift Testing framework

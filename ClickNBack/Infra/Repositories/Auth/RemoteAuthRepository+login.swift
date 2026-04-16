@@ -3,9 +3,9 @@
 import Foundation
 
 public struct LoginSuccessResponse: Decodable {
-    let accessToken: String
-    let refreshToken: String
-    let tokenType: String
+    public let accessToken: String
+    public let refreshToken: String
+    public let tokenType: String
 
     enum CodingKeys: String, CodingKey {
         case accessToken = "access_token"
