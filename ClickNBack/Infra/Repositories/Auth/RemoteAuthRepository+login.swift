@@ -2,7 +2,7 @@
 
 import Foundation
 
-struct LoginSuccessResponse: Decodable {
+public struct LoginSuccessResponse: Decodable {
     let accessToken: String
     let refreshToken: String
     let tokenType: String
@@ -15,7 +15,7 @@ struct LoginSuccessResponse: Decodable {
 }
 
 extension RemoteAuthRepository {
-    func login(with credentials: LoginCredentials) async -> LoginResult {
+    public func login(with credentials: LoginCredentials) async -> LoginResult {
         let loginRequest = AuthAPIRequest.login(
             email: credentials.email,
             password: credentials.password

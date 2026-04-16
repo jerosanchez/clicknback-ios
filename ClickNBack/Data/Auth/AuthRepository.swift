@@ -1,14 +1,14 @@
 //
 
-enum LoginError: Error {
+public enum LoginError: Error {
     case badCredentials
     case requestTimeout
     case noConnectivity
     case unexpectedError(Error?)
 }
 
-typealias LoginResult = Result<AuthTokens, LoginError>
+public typealias LoginResult = Result<AuthTokens, LoginError>
 
-protocol AuthRepository {
+public protocol AuthRepository {
     func login(with credentials: LoginCredentials) async -> LoginResult
 }

@@ -36,7 +36,6 @@ let project = Project(
             settings: .settings(
                 base: [
                     "SWIFT_VERSION": "6.0",
-                    "SWIFT_DEFAULT_ACTOR_ISOLATION": "MainActor",
                     "SWIFT_STRICT_CONCURRENCY_ENABLED": "COMPLETE",
                 ]
             )
@@ -54,7 +53,6 @@ let project = Project(
             settings: .settings(
                 base: [
                     "SWIFT_VERSION": "6.0",
-                    "SWIFT_DEFAULT_ACTOR_ISOLATION": "MainActor", 
                     "SWIFT_STRICT_CONCURRENCY_ENABLED": "COMPLETE",
                 ]
             )
@@ -64,12 +62,12 @@ let project = Project(
         .scheme(
             name: "ClickNBack-Dev",
             buildAction: .buildAction(targets: ["ClickNBack", "ClickNBackTests", "ClickNBackUITests"]),
-            testAction: .targets(["ClickNBackTests", "ClickNBackUITests"])
+            testAction: .targets(["ClickNBackTests"])
         ),
         .scheme(
             name: "ClickNBack-Prod",
             buildAction: .buildAction(targets: ["ClickNBack"]),
-            testAction: .targets(["ClickNBackTests"])
+            testAction: .targets(["ClickNBackTests", "ClickNBackUITests"])
         ),
     ]
 )

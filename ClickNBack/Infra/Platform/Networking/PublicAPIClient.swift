@@ -2,11 +2,11 @@
 
 import Foundation
 
-final class PublicAPIClient: APIClient {
+public final class PublicAPIClient: APIClient {
     private let baseURL: URL
     private let session: URLSession
 
-    init(
+    public init(
         baseURL: URL,
         session: URLSession,
     ) {
@@ -14,7 +14,7 @@ final class PublicAPIClient: APIClient {
         self.session = session
     }
 
-    func request<T: Decodable>(apiRequest: APIRequest) async -> Result<T, APIClientError> {
+    public func request<T: Decodable>(apiRequest: APIRequest) async -> Result<T, APIClientError> {
         guard var components = URLComponents(
             url: baseURL.appendingPathComponent(apiRequest.endpoint),
             resolvingAgainstBaseURL: false

@@ -2,7 +2,7 @@
 
 import Foundation
 
-enum APIClientError: Error {
+public enum APIClientError: Error {
     case invalidURL
     case decodingError
     case apiError(Int, Data?)

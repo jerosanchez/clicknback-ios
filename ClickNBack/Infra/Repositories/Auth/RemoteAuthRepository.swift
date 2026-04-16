@@ -2,10 +2,10 @@
 
 import Foundation
 
-final class RemoteAuthRepository: AuthRepository {
+public final class RemoteAuthRepository: AuthRepository {
     private(set) var apiClient: APIClient
 
-    init(apiClient: APIClient) {
+    public init(apiClient: APIClient) {
         self.apiClient = apiClient
     }
 }
