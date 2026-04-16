@@ -6,7 +6,7 @@ enum LoginUseCaseResult {
     case success
     case badCredentials
     case requestTimeout
-    case noInternetConnection
+    case noConnectivity
     case unexpectedError
 }
 
@@ -36,8 +36,8 @@ final class LoginUseCase {
             case .badCredentials:
                 return .badCredentials
 
-            case .noInternetConnection:
-                return .noInternetConnection
+            case .noConnectivity:
+                return .noConnectivity
 
             case .requestTimeout:
                 return .requestTimeout

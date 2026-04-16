@@ -3,7 +3,7 @@
 enum LoginError: Error {
     case badCredentials
     case requestTimeout
-    case noInternetConnection
+    case noConnectivity
     case unexpectedError(Error?)
 }
 
