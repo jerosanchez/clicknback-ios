@@ -1,3 +1,3 @@
 //
 
-typealias MockLogger = ConsoleLogger
+public typealias MockLogger = ConsoleLogger

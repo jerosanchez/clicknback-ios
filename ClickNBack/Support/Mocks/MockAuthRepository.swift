@@ -1,16 +1,18 @@
 //
 
-typealias LoginHandler = (LoginCredentials) async -> LoginResult
+public typealias LoginHandler = (LoginCredentials) async -> LoginResult
 
-final class MockAuthRepository: AuthRepository {
+public final class MockAuthRepository: AuthRepository {
     
     // MARK: - Configurable hooks (optional overrides)
 
-    var loginHandler: LoginHandler?
+    public var loginHandler: LoginHandler?
+
+    public init() {}
 
     // MARK: - API
 
-    func login(with credentials: LoginCredentials) async -> LoginResult {
+    public func login(with credentials: LoginCredentials) async -> LoginResult {
         await loginHandler?(credentials) ?? .success(.mock)
     }
 }

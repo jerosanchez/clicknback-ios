@@ -2,19 +2,19 @@
 
 import Foundation
 
-final class MockAPIClient: APIClient {
+public final class MockAPIClient: APIClient {
     
     // MARK: - Spy Properties
     
-    var requestHistory: [(endpoint: String, method: String)] = []
-    var mockResponses: [String: Any] = [:]
-    var mockError: APIClientError?
+    public var requestHistory: [(endpoint: String, method: String)] = []
+    public var mockResponses: [String: Any] = [:]
+    public var mockError: APIClientError?
 
-    init() {}
+    public init() {}
 
     // MARK: - API
     
-    func request<T: Decodable>(apiRequest: APIRequest) async -> Result<T, APIClientError> {
+    public func request<T: Decodable>(apiRequest: APIRequest) async -> Result<T, APIClientError> {
         requestHistory.append((endpoint: apiRequest.endpoint, method: String(describing: apiRequest.method)))
 
         if let error = mockError {
@@ -32,15 +32,15 @@ final class MockAPIClient: APIClient {
 
     // MARK: - Testing Helpers
 
-    func setMockResponse(_ response: some Any, for endpoint: String) {
+    public func setMockResponse(_ response: some Any, for endpoint: String) {
         mockResponses[endpoint] = response
     }
 
-    func setMockError(_ error: APIClientError) {
+    public func setMockError(_ error: APIClientError) {
         mockError = error
     }
 
-    func reset() {
+    public func reset() {
         mockResponses.removeAll()
         mockError = nil
         requestHistory.removeAll()

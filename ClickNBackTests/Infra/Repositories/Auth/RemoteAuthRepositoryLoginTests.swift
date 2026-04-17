@@ -18,7 +18,8 @@ struct RemoteAuthRepositoryLoginTests {
             refreshToken: tokens.refreshToken,
             tokenType: "Bearer"
         )
-        let apiClient = MockAPIClient(result: .success(successResponse))
+        let apiClient = MockAPIClient()
+        apiClient.setMockResponse(successResponse, for: "v1/auth/login")
         let sut = makeSUT(apiClient: apiClient)
 
         // Act
@@ -36,7 +37,8 @@ struct RemoteAuthRepositoryLoginTests {
     @Test
     func login_returnsBadCredentials_onAPIError() async {
         // Arrange
-        let apiClient = MockAPIClient(result: .failure(.apiError(401, nil)))
+        let apiClient = MockAPIClient()
+        apiClient.setMockError(.apiError(401, nil))
         let sut = makeSUT(apiClient: apiClient)
 
         // Act
@@ -52,7 +54,8 @@ struct RemoteAuthRepositoryLoginTests {
     @Test
     func login_returnsServerError_onServerError() async {
         // Arrange
-        let apiClient = MockAPIClient(result: .failure(.serverError(503)))
+        let apiClient = MockAPIClient()
+        apiClient.setMockError(.serverError(503))
         let sut = makeSUT(apiClient: apiClient)
 
         // Act
@@ -68,7 +71,8 @@ struct RemoteAuthRepositoryLoginTests {
     @Test
     func login_returnsRequestTimeout_onRequestTimeoutError() async {
         // Arrange
-        let apiClient = MockAPIClient(result: .failure(.requestTimeout))
+        let apiClient = MockAPIClient()
+        apiClient.setMockError(.requestTimeout)
         let sut = makeSUT(apiClient: apiClient)
 
         // Act
@@ -84,7 +88,8 @@ struct RemoteAuthRepositoryLoginTests {
     @Test
     func login_returnsNoConnectivity_onNoConnectionError() async {
         // Arrange
-        let apiClient = MockAPIClient(result: .failure(.noConnection))
+        let apiClient = MockAPIClient()
+        apiClient.setMockError(.noConnection)
         let sut = makeSUT(apiClient: apiClient)
 
         // Act
@@ -100,7 +105,8 @@ struct RemoteAuthRepositoryLoginTests {
     @Test
     func login_returnsUnexpectedError_onDecodingError() async {
         // Arrange
-        let apiClient = MockAPIClient(result: .failure(.decodingError))
+        let apiClient = MockAPIClient()
+        apiClient.setMockError(.decodingError)
         let sut = makeSUT(apiClient: apiClient)
 
         // Act
@@ -116,7 +122,8 @@ struct RemoteAuthRepositoryLoginTests {
     @Test
     func login_returnsUnexpectedError_onInvalidURLError() async {
         // Arrange
-        let apiClient = MockAPIClient(result: .failure(.invalidURL))
+        let apiClient = MockAPIClient()
+        apiClient.setMockError(.invalidURL)
         let sut = makeSUT(apiClient: apiClient)
 
         // Act
@@ -132,7 +139,8 @@ struct RemoteAuthRepositoryLoginTests {
     @Test
     func login_returnsUnexpectedError_onUnknownError() async {
         // Arrange
-        let apiClient = MockAPIClient(result: .failure(.unknownError(nil)))
+        let apiClient = MockAPIClient()
+        apiClient.setMockError(.unknownError(nil))
         let sut = makeSUT(apiClient: apiClient)
 
         // Act
@@ -147,46 +155,21 @@ struct RemoteAuthRepositoryLoginTests {
 
     // MARK: - Helpers
 
-    private func makeSUT(
-        apiClient: APIClient? = nil
-    ) -> RemoteAuthRepository {
-        let client = apiClient ?? MockAPIClient(result: .success(LoginSuccessResponse(
+    private func makeAPIClient(
+        response: LoginSuccessResponse = LoginSuccessResponse(
             accessToken: "access-token",
             refreshToken: "refresh-token",
             tokenType: "Bearer"
-        )))
-        return RemoteAuthRepository(apiClient: client)
-    }
-}
-
-// MARK: - Mocks
-
-private final class MockAPIClient: APIClient {
-    private let successResponse: LoginSuccessResponse?
-    private let errorResponse: APIClientError?
-
-    init(result: Result<LoginSuccessResponse, APIClientError>) {
-        switch result {
-        case let .success(response):
-            self.successResponse = response
-            self.errorResponse = nil
-        case let .failure(error):
-            self.successResponse = nil
-            self.errorResponse = error
-        }
+        ),
+        endpoint: String = "v1/auth/login"
+    ) -> MockAPIClient {
+        let client = MockAPIClient()
+        client.setMockResponse(response, for: endpoint)
+        return client
     }
 
-    func request<T: Decodable>(apiRequest: APIRequest) async -> Result<T, APIClientError> {
-        if let error = errorResponse {
-            return .failure(error)
-        }
-
-        if let response = successResponse, let typedResponse = response as? T {
-            return .success(typedResponse)
-        }
-
-        // This should not happen in tests, but provides a fallback
-        return .failure(.unknownError(nil))
+    private func makeSUT(apiClient: APIClient? = nil) -> RemoteAuthRepository {
+        RemoteAuthRepository(apiClient: apiClient ?? makeAPIClient())
     }
 }
 

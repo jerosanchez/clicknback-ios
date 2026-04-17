@@ -27,10 +27,16 @@ Each test must verify **one discrete behavior**:
 
 - Never use real implementations in tests
 - Inject all dependencies as mock instances
-- Mock classes should be **private and scoped to the test file**
+- Prefer **shared `public` mocks** in `ClickNBack/Support/Mocks/` over per-file private mocks — they can be reused by both tests and previews without `@testable import`
+- Only create a private local mock when the shared one genuinely cannot cover the scenario
 - Mocks should implement only the protocol methods needed for testing
 - Mocks should allow configuration of return values and error conditions
 - Use meaningful names: `MockAuthRepository`, `MockKeyValueStorage`, etc.
+
+### Import Style
+
+- Use `import ClickNBack` (plain import) in test files — shared mocks are `public` so no special access is needed
+- **Never use `@testable import`** unless there is absolutely no other option (e.g., testing a `internal` type that cannot be made `public`)
 
 ### SUT Factory Method `makeSUT()`
 
@@ -39,6 +45,22 @@ Extract SUT instantiation to a private factory method with default values:
 - Allows tests to provide specific dependencies for scenarios
 - Makes the `Arrange` section cleaner and more readable
 - Default dependency values should represent the "happy path"
+
+### Helper Factory Methods
+
+Create factory methods for frequently-used test dependencies (mocks, models) using the `make<Type>()` naming pattern:
+- **Name pattern:** `make<Type>()` (e.g., `makeAPIClient()`, `makeLoginCredentials()`)
+- **Parameters:** Accept optional parameters with sensible defaults for customization
+  - Example: `makeAPIClient(response: LoginSuccessResponse = default, endpoint: String = default)`
+- **Purpose:** Allow tests to easily create variations without duplicating setup code
+- **Flexibility:** Default values cover the happy path; tests override only what they need
+- Example in `RemoteAuthRepositoryLoginTests`:
+  ```swift
+  private func makeAPIClient(
+      response: LoginSuccessResponse = LoginSuccessResponse(...),
+      endpoint: String = "v1/auth/login"
+  ) -> MockAPIClient { ... }
+  ```
 
 ### Test Data and Values
 
