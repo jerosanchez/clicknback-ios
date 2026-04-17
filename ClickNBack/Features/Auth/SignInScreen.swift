@@ -2,11 +2,9 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct SignInScreen: View {
     
-    @State private var viewModel = SignInViewModel()
+    @State var viewModel: SignInViewModel
 
     var body: some View {
         NavigationStack {
@@ -38,5 +36,5 @@ struct SignInScreen: View {
 }
 
 #Preview {
-    SignInScreen()
+    PreviewContainer.signInScreen()
 }

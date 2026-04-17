@@ -55,7 +55,9 @@ struct SignInFormView: View {
     private func signupButton() -> some View {
         Button(
             action: {
-                // TODO: Implement sign-in logic
+                Task {
+                    await viewModel.login()
+                }
             },
             label: {
                 HStack {
@@ -81,6 +83,6 @@ struct SignInFormView: View {
 }
 
 #Preview {
-    SignInFormView(viewModel: SignInViewModel())
+    PreviewContainer.signInScreen()
 }
 
