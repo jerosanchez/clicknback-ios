@@ -40,7 +40,6 @@ class SignInViewModel {
         let loginResult = await loginUseCase.execute(with: credentials)
 
         state = loginResult.toState()
-        print("Login result: \(state)") // Debug log
     }
 }
 

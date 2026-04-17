@@ -10,6 +10,7 @@ struct SignInScreen: View {
         NavigationStack {
             VStack(spacing: AppSpacing.large) {
                 SignInFormView(viewModel: viewModel)
+                SignInResultView(state: viewModel.state)
                 Spacer()
             }
             .padding(AppSpacing.medium)
@@ -36,5 +37,5 @@ struct SignInScreen: View {
 }
 
 #Preview {
-    PreviewContainer.signInScreen()
+    PreviewContainer.signInScreen(loginHandler: { _ in .success(.mock) })
 }
