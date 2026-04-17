@@ -48,6 +48,22 @@ struct RemoteAuthRepositoryLoginTests {
             return
         }
     }
+    
+    @Test
+    func login_returnsServerError_onServerError() async {
+        // Arrange
+        let apiClient = MockAPIClient(result: .failure(.serverError(503)))
+        let sut = makeSUT(apiClient: apiClient)
+
+        // Act
+        let result = await sut.login(with: credentials)
+
+        // Assert
+        guard case .failure(.serverError) = result else {
+            #expect(Bool(false), "Expected server error")
+            return
+        }
+    }
 
     @Test
     func login_returnsRequestTimeout_onRequestTimeoutError() async {
@@ -101,22 +117,6 @@ struct RemoteAuthRepositoryLoginTests {
     func login_returnsUnexpectedError_onInvalidURLError() async {
         // Arrange
         let apiClient = MockAPIClient(result: .failure(.invalidURL))
-        let sut = makeSUT(apiClient: apiClient)
-
-        // Act
-        let result = await sut.login(with: credentials)
-
-        // Assert
-        guard case .failure(.unexpectedError) = result else {
-            #expect(Bool(false), "Expected unexpectedError")
-            return
-        }
-    }
-
-    @Test
-    func login_returnsUnexpectedError_onServerError() async {
-        // Arrange
-        let apiClient = MockAPIClient(result: .failure(.serverError(500)))
         let sut = makeSUT(apiClient: apiClient)
 
         // Act

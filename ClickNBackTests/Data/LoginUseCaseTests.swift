@@ -49,6 +49,19 @@ struct LoginUseCaseTests {
         // Assert
         #expect(result == .badCredentials)
     }
+    
+    @Test
+    func execute_returnsServerError_onServerError() async {
+        // Arrange
+        let repository = MockAuthRepository(result: .failure(.serverError))
+        let sut = makeSUT(authRepository: repository)
+
+        // Act
+        let result = await sut.execute(with: credentials)
+
+        // Assert
+        #expect(result == .serverError)
+    }
 
     @Test
     func execute_returnsNoConnectivity_onNoConnectivityError() async {

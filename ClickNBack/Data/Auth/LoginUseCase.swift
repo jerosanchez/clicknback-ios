@@ -5,6 +5,7 @@ import Foundation
 public enum LoginUseCaseResult {
     case success
     case badCredentials
+    case serverError
     case requestTimeout
     case noConnectivity
     case unexpectedError
@@ -47,13 +48,12 @@ public final class LoginUseCase {
             switch error {
             case .badCredentials:
                 return .badCredentials
-
+            case .serverError:
+                return .serverError
             case .noConnectivity:
                 return .noConnectivity
-
             case .requestTimeout:
                 return .requestTimeout
-
             case .unexpectedError:
                 return .unexpectedError
             }

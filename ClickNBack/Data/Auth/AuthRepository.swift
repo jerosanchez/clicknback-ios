@@ -2,6 +2,7 @@
 
 public enum LoginError: Error {
     case badCredentials
+    case serverError
     case requestTimeout
     case noConnectivity
     case unexpectedError(Error?)
