@@ -1,6 +1,7 @@
 //
 
 import ClickNBack
+import Foundation
 import Testing
 
 @MainActor
@@ -13,7 +14,7 @@ struct PublicAPIClientTests {
         for statusCode in [200, 250, 299] {
             // Arrange
             let testModel = TestModel(id: 1, name: "Test")
-            MockURLProtocol.stub(data: try! JSONEncoder().encode(testModel), statusCode: statusCode)
+            MockURLProtocol.stub(data: encoded(testModel), statusCode: statusCode)
             let sut = makeSUT()
             let apiRequest = MockAPIRequest(endpoint: "/items")
 
@@ -213,7 +214,7 @@ struct PublicAPIClientTests {
     @Test
     func request_constructsURLWithQueryParameters() async {
         // Arrange
-        MockURLProtocol.stub(data: try! JSONEncoder().encode(TestModel(id: 1, name: "Test")), statusCode: 200)
+        MockURLProtocol.stub(data: encoded(TestModel(id: 1, name: "Test")), statusCode: 200)
         let sut = makeSUT()
         let apiRequest = MockAPIRequest(
             endpoint: "/items",
@@ -232,7 +233,7 @@ struct PublicAPIClientTests {
     @Test
     func request_setsCorrectHTTPMethod() async {
         // Arrange
-        MockURLProtocol.stub(data: try! JSONEncoder().encode(TestModel(id: 1, name: "Test")), statusCode: 200)
+        MockURLProtocol.stub(data: encoded(TestModel(id: 1, name: "Test")), statusCode: 200)
         let sut = makeSUT()
         let apiRequest = MockAPIRequest(endpoint: "/items", method: .POST)
 
@@ -246,7 +247,7 @@ struct PublicAPIClientTests {
     @Test
     func request_setsContentTypeHeader() async {
         // Arrange
-        MockURLProtocol.stub(data: try! JSONEncoder().encode(TestModel(id: 1, name: "Test")), statusCode: 200)
+        MockURLProtocol.stub(data: encoded(TestModel(id: 1, name: "Test")), statusCode: 200)
         let sut = makeSUT()
         let apiRequest = MockAPIRequest(endpoint: "/items")
 
@@ -260,7 +261,7 @@ struct PublicAPIClientTests {
     @Test
     func request_includesCustomHeaders() async {
         // Arrange
-        MockURLProtocol.stub(data: try! JSONEncoder().encode(TestModel(id: 1, name: "Test")), statusCode: 200)
+        MockURLProtocol.stub(data: encoded(TestModel(id: 1, name: "Test")), statusCode: 200)
         let sut = makeSUT()
         let apiRequest = MockAPIRequest(
             endpoint: "/items",
@@ -278,7 +279,7 @@ struct PublicAPIClientTests {
     @Test
     func request_includesRequestBody() async {
         // Arrange
-        MockURLProtocol.stub(data: try! JSONEncoder().encode(TestModel(id: 1, name: "Test")), statusCode: 201)
+        MockURLProtocol.stub(data: encoded(TestModel(id: 1, name: "Test")), statusCode: 201)
         let sut = makeSUT()
         let requestBody: [String: Any] = ["name": "Test Item", "value": 42]
         let apiRequest = MockAPIRequest(endpoint: "/items", method: .POST, body: requestBody)
@@ -298,6 +299,10 @@ struct PublicAPIClientTests {
 
     // MARK: - Helpers
 
+    private func encoded<T: Encodable>(_ value: T) -> Data {
+        (try? JSONEncoder().encode(value)) ?? Data()
+    }
+
     private func makeSUT(baseURL: URL? = nil) -> PublicAPIClient {
         let config = URLSessionConfiguration.ephemeral
         config.protocolClasses = [MockURLProtocol.self]
@@ -312,10 +317,10 @@ struct PublicAPIClientTests {
 /// returning pre-configured stub responses without making real network calls.
 /// Uses Apple's official URLProtocol interception mechanism (Foundation framework).
 private final class MockURLProtocol: URLProtocol {
-    private(set) static var lastRequest: URLRequest?
-    private static var stubbedData: Data?
-    private static var stubbedResponse: HTTPURLResponse?
-    private static var stubbedError: Error?
+    nonisolated(unsafe) private(set) static var lastRequest: URLRequest?
+    nonisolated(unsafe) private static var stubbedData: Data?
+    nonisolated(unsafe) private static var stubbedResponse: HTTPURLResponse?
+    nonisolated(unsafe) private static var stubbedError: Error?
 
     static func stub(data: Data = Data(), statusCode: Int) {
         stubbedData = data
@@ -341,7 +346,20 @@ private final class MockURLProtocol: URLProtocol {
     override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
 
     override func startLoading() {
-        MockURLProtocol.lastRequest = request
+        var capturedRequest = request
+        if let stream = request.httpBodyStream {
+            stream.open()
+            var bodyData = Data()
+            let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: 4096)
+            while stream.hasBytesAvailable {
+                let read = stream.read(buffer, maxLength: 4096)
+                if read > 0 { bodyData.append(buffer, count: read) }
+            }
+            buffer.deallocate()
+            stream.close()
+            capturedRequest.httpBody = bodyData
+        }
+        MockURLProtocol.lastRequest = capturedRequest
 
         if let error = MockURLProtocol.stubbedError {
             client?.urlProtocol(self, didFailWithError: error)
@@ -369,6 +387,7 @@ private struct MockAPIRequest: APIRequest {
     let queryParams: [String: String]?
     let body: [String: Any]?
 
+    @MainActor
     init(
         endpoint: String,
         method: HTTPMethod = .GET,

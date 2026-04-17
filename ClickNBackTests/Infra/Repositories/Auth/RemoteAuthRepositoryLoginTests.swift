@@ -18,7 +18,7 @@ struct RemoteAuthRepositoryLoginTests {
             refreshToken: tokens.refreshToken,
             tokenType: "Bearer"
         )
-        let apiClient = MockAPIClient(result: .success(successResponse)
+        let apiClient = MockAPIClient(result: .success(successResponse))
         let sut = makeSUT(apiClient: apiClient)
 
         // Act
@@ -190,14 +190,3 @@ private final class MockAPIClient: APIClient {
     }
 }
 
-private extension LoginSuccessResponse {
-    public init(
-        accessToken: String, 
-        refreshToken: String, 
-        tokenType: String
-    ) {
-        self.accessToken = accessToken
-        self.refreshToken = refreshToken
-        self.tokenType = tokenType
-    }
-}

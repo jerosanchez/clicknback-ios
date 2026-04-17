@@ -7,6 +7,12 @@ public struct LoginSuccessResponse: Decodable {
     public let refreshToken: String
     public let tokenType: String
 
+    public init(accessToken: String, refreshToken: String, tokenType: String) {
+        self.accessToken = accessToken
+        self.refreshToken = refreshToken
+        self.tokenType = tokenType
+    }
+
     enum CodingKeys: String, CodingKey {
         case accessToken = "access_token"
         case refreshToken = "refresh_token"
