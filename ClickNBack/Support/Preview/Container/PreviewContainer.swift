@@ -1,3 +1,3 @@
 //
 
-struct PreviewContainer {}
+struct PreviewContainer { }

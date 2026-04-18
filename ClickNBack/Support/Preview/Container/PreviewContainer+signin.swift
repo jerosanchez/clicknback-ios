@@ -44,6 +44,6 @@ extension PreviewContainer {
         appLanguage: AppLanguage = .english
     ) -> some View {
         SignInResultView(state: state)
-            .environment(\.locale, appLanguage.locale)
+        .environment(\.locale, appLanguage.locale)
     }
 }
