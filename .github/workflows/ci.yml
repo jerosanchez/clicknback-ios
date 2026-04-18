@@ -19,6 +19,11 @@ jobs:
         with:
           xcode-version: "26.0.0"
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - name: Install dev tools
         run: |
           make install
@@ -30,6 +35,11 @@ jobs:
       - name: Run QA Gates
         run: |
           make qa-gates
+
+      - name: Check coverage (informational)
+        continue-on-error: true
+        run: |
+          make coverage
 
       - name: Upload build logs on failure
         if: failure()

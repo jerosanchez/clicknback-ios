@@ -104,7 +104,19 @@ Test files must mirror the production code structure under `*Tests/` folders:
 
 ## Quality Assurance Gates
 
-- Always run `make qa-gates` after each change to ensure nothing is broken 
-- This runs the complete quality assurance pipeline: linting, formatting, tests, and other checks
+- Always run `make qa-gates` after each change to ensure nothing is broken
+- This runs the complete quality assurance pipeline: linting, formatting, tests, coverage check, and other checks
 - Do not commit or submit pull requests without passing `make qa-gates`
 - This ensures consistency across development, code review, and pipeline environments
+
+### Coverage Gate
+
+- After writing or modifying any tests, run `make coverage` to check the current coverage level
+- The minimum passing threshold is currently **65%** — coverage below this will fail `make qa-gates`
+- Aim to keep coverage trending upward; the long-term target is **75%**
+- To check coverage manually at a custom threshold: `make coverage MIN_COVERAGE=75`
+- Coverage tiers reported by the tool:
+  - ❌ **Poor** — below 60%
+  - ⚠️ **Almost there** — 60% to minimum
+  - ✅ **Passed** — meets minimum but below 75%
+  - 🚀 **Exceeds expectations** — 75% or above

@@ -86,7 +86,7 @@ open: check-xcode
 		exit 1; \
 	fi
 
-qa-gates: build test lint
+qa-gates: build test coverage lint
 	@echo "$(COLOR_GREEN)✓ All QA gates passed$(COLOR_RESET)"
 
 # ============================================================================
@@ -106,11 +106,14 @@ SIM_DEST := platform=iOS Simulator,name=$(SIM_DEVICE)
 # Bypass code signing for simulator builds (no development team required)
 NO_SIGN := CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
 
+# Minimum required coverage percentage (override with: make coverage MIN_COVERAGE=70)
+MIN_COVERAGE ?= 65
+
 # ============================================================================
 # CODE QUALITY
 # ============================================================================
 
-.PHONY: build test format lint 
+.PHONY: build test coverage format lint
 
 build: check-xcode
 	@echo "$(COLOR_BLUE)Building ClickNBack [$(SCHEME)] → $(SIM_DEVICE)...$(COLOR_RESET)"
@@ -128,6 +131,10 @@ test: check-xcode
 		-derivedDataPath build \
 		$(NO_SIGN)
 	@echo "$(COLOR_GREEN)✓ Unit tests completed$(COLOR_RESET)"
+
+coverage: check-xcode
+	@echo "$(COLOR_BLUE)Checking coverage (minimum: $(MIN_COVERAGE)%)...$(COLOR_RESET)"
+	@python3 Scripts/check_coverage.py $(MIN_COVERAGE)
 
 format: check-swiftformat
 	@echo "$(COLOR_BLUE)Formatting Swift code...$(COLOR_RESET)"
