@@ -63,7 +63,10 @@ let project = Project(
         .scheme(
             name: "ClickNBack-Dev",
             buildAction: .buildAction(targets: ["ClickNBack", "ClickNBackTests", "ClickNBackUITests"]),
-            testAction: .targets(["ClickNBackTests"])
+            testAction: .targets(
+                [.testableTarget(target: .target("ClickNBackTests"))],
+                options: .options(coverage: true, codeCoverageTargets: [.target("ClickNBack")])
+            )
         ),
         .scheme(
             name: "ClickNBack-Prod",
