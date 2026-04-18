@@ -9,9 +9,14 @@ class SignInViewModel {
     // MARK: Dependecies
     
     var loginUseCase: LoginUseCase
+    var analyticsTracker: AnalyticsTracker
     
-    init(loginUseCase: LoginUseCase) {
+    init(
+        loginUseCase: LoginUseCase,
+        analyticsTracker: AnalyticsTracker
+    ) {
         self.loginUseCase = loginUseCase
+        self.analyticsTracker = analyticsTracker
     }
     
     // MARK: State
@@ -33,6 +38,10 @@ class SignInViewModel {
     
     // MARK: API
     
+    func onAppear() {
+        track(.loginScreenShowed)
+    }
+    
     func login() async {
         state = .loading
 
@@ -40,6 +49,18 @@ class SignInViewModel {
         let loginResult = await loginUseCase.execute(with: credentials)
 
         state = loginResult.toState()
+        
+        if state == .success {
+            track(.loginSucceeded(email: credentials.email))
+        }
+    }
+    
+    // MARK: - Helpers
+    
+    private func track(_ event: SignInAnalyticsEvents) {
+        Task {
+            await analyticsTracker.track(event)
+        }
     }
 }
 

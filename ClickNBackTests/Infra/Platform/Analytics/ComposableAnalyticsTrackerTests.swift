@@ -9,7 +9,7 @@ import Testing
 struct ComposableAnalyticsTrackerTests {
 
     @Test
-    func track_forwardsEvent_toSingleTracker() {
+    func track_forwardsEvent_toSingleTracker() async {
         // Arrange
         let tracker = MockAnalyticsTracker()
         let event = makeEvent()
@@ -17,13 +17,14 @@ struct ComposableAnalyticsTrackerTests {
 
         // Act
         sut.track(event)
+        await Task.yield()
 
         // Assert
         #expect(tracker.trackedEventNames == [event.name])
     }
 
     @Test
-    func track_forwardsEvent_toAllTrackers() {
+    func track_forwardsEvent_toAllTrackers() async {
         // Arrange
         let firstTracker = MockAnalyticsTracker()
         let secondTracker = MockAnalyticsTracker()
@@ -32,6 +33,7 @@ struct ComposableAnalyticsTrackerTests {
 
         // Act
         sut.track(event)
+        await Task.yield()
 
         // Assert
         #expect(firstTracker.trackedEventNames == [event.name])
@@ -39,20 +41,21 @@ struct ComposableAnalyticsTrackerTests {
     }
 
     @Test
-    func track_doesNotForwardEvent_onEmptyTrackerList() {
+    func track_doesNotForwardEvent_onEmptyTrackerList() async {
         // Arrange
         let sut = makeSUT(trackers: [])
         let event = makeEvent()
 
         // Act
         sut.track(event)
+        await Task.yield()
 
         // Assert — reaching this point without crash confirms the behavior
         #expect(Bool(true))
     }
 
     @Test
-    func track_forwardsMultipleEvents_inOrder() {
+    func track_forwardsMultipleEvents_inOrder() async {
         // Arrange
         let tracker = MockAnalyticsTracker()
         let firstEvent = makeEvent(name: "first-event")
@@ -62,6 +65,7 @@ struct ComposableAnalyticsTrackerTests {
         // Act
         sut.track(firstEvent)
         sut.track(secondEvent)
+        await Task.yield()
 
         // Assert
         #expect(tracker.trackedEventNames == [firstEvent.name, secondEvent.name])

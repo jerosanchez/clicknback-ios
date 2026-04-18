@@ -10,6 +10,8 @@ public final class ComposableAnalyticsTracker: AnalyticsTracker {
     }
 
     public func track(_ event: AnalyticsEvent) {
-        trackers.forEach { $0.track(event) }
+        trackers.forEach { tracker in
+            Task { await tracker.track(event) }
+        }
     }
 }

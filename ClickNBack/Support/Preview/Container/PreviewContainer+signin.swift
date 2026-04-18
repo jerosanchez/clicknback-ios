@@ -12,7 +12,8 @@ extension PreviewContainer {
                 loginUseCase: LoginUseCase(
                     authRepository: authRepository,
                     tokenStorage: MockKeyValueStorage()
-                )
+                ),
+                analyticsTracker: MockAnalyticsTracker()
             )
         )
     }

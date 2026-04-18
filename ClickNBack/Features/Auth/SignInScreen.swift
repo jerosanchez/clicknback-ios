@@ -6,6 +6,10 @@ struct SignInScreen: View {
     
     @State var viewModel: SignInViewModel
 
+    private var isLoading: Bool {
+        viewModel.state == .loading
+    }
+
     var body: some View {
         NavigationStack {
             VStack(spacing: AppSpacing.large) {
@@ -15,6 +19,15 @@ struct SignInScreen: View {
             }
             .padding(AppSpacing.medium)
             .navigationTitle("Sign In")
+            .disabled(isLoading)
+        }
+        .overlay(alignment: .center) {
+            if isLoading {
+                loadingOverlay()
+            }
+        }
+        .onAppear {
+            viewModel.onAppear()
         }
     }
 
