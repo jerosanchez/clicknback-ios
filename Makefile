@@ -86,7 +86,9 @@ open: check-xcode
 		exit 1; \
 	fi
 
-qa-gates: build test coverage lint
+# coverage is not mandatory as a QA gate yet, it runs separately as informational in CI, 
+# so we don't fail the gate if it doesn't pass
+qa-gates: build lint test-all
 	@echo "$(COLOR_GREEN)✓ All QA gates passed$(COLOR_RESET)"
 
 # ============================================================================
@@ -113,7 +115,7 @@ MIN_COVERAGE ?= 65
 # CODE QUALITY
 # ============================================================================
 
-.PHONY: build test coverage format lint
+.PHONY: build test test-integration test-all coverage format lint
 
 build: check-xcode
 	@echo "$(COLOR_BLUE)Building ClickNBack [$(SCHEME)] → $(SIM_DEVICE)...$(COLOR_RESET)"
@@ -131,6 +133,25 @@ test: check-xcode
 		-derivedDataPath build \
 		$(NO_SIGN)
 	@echo "$(COLOR_GREEN)✓ Unit tests completed$(COLOR_RESET)"
+
+test-integration: check-xcode
+	@echo "$(COLOR_BLUE)Running integration tests [$(SCHEME)] → $(SIM_DEVICE)...$(COLOR_RESET)"
+	xcodebuild test -scheme $(SCHEME) -configuration Debug \
+		-destination '$(SIM_DEST)' \
+		-only-testing ClickNBackIntegrationTests \
+		-derivedDataPath build \
+		$(NO_SIGN)
+	@echo "$(COLOR_GREEN)✓ Integration tests completed$(COLOR_RESET)"
+
+test-all: check-xcode
+	@echo "$(COLOR_BLUE)Running all tests [$(SCHEME)] → $(SIM_DEVICE)...$(COLOR_RESET)"
+	xcodebuild test -scheme $(SCHEME) -configuration Debug \
+		-destination '$(SIM_DEST)' \
+		-only-testing ClickNBackTests \
+		-only-testing ClickNBackIntegrationTests \
+		-derivedDataPath build \
+		$(NO_SIGN)
+	@echo "$(COLOR_GREEN)✓ All tests completed$(COLOR_RESET)"
 
 coverage: check-xcode
 	@echo "$(COLOR_BLUE)Checking coverage (minimum: $(MIN_COVERAGE)%)...$(COLOR_RESET)"

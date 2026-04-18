@@ -28,6 +28,20 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "28D5CE7C42A7D7A88A9B39C1"
+               BuildableName = "ClickNBackIntegrationTests.xctest"
+               BlueprintName = "ClickNBackIntegrationTests"
+               ReferencedContainer = "container:ClickNBack.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "ABF6458EBA5C2E0892180465"
                BuildableName = "ClickNBackTests.xctest"
                BlueprintName = "ClickNBackTests"
@@ -56,6 +70,17 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "28D5CE7C42A7D7A88A9B39C1"
+               BuildableName = "ClickNBackIntegrationTests.xctest"
+               BlueprintName = "ClickNBackIntegrationTests"
+               ReferencedContainer = "container:ClickNBack.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
          <TestableReference
             skipped = "NO"
             parallelizable = "NO">

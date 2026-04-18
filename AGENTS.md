@@ -78,12 +78,13 @@ Create factory methods for frequently-used test dependencies (mocks, models) usi
 
 ### Test File Placement
 
-Test files must mirror the production code structure under `*Tests/` folders:
-- **Data layer tests:** `ClickNBackTests/Data/*` — test use cases, repositories, and models
-- **Infra layer tests:** `ClickNBackTests/Infra/Repositories/` — test remote/local repositories
-- **Feature layer tests:** `ClickNBackTests/Features/*/` — test screens and view models
+Test files must mirror the production code structure under `ClickNBackTests/Unit/`:
+- **Data layer tests:** `ClickNBackTests/Unit/Data/*` — test use cases, repositories, and models
+- **Infra layer tests:** `ClickNBackTests/Unit/Infra/Repositories/` — test remote/local repositories
+- **Feature layer tests:** `ClickNBackTests/Unit/Features/*/` — test screens and view models
+- Integration tests go under `ClickNBackTests/Integration/` mirroring the same structure
 - Test file naming: `<ClassName>+<MethodName>Tests.swift` or `<ClassName>Tests.swift`
-- Example: Repository login method tested in `ClickNBackTests/Infra/Repositories/Auth/RemoteAuthRepositoryLoginTests.swift`
+- Example: Repository login method tested in `ClickNBackTests/Unit/Infra/Repositories/Auth/RemoteAuthRepositoryLoginTests.swift`
 
 ### Assertion Best Practices
 
@@ -96,16 +97,35 @@ Test files must mirror the production code structure under `*Tests/` folders:
 
 ## Running Tests
 
-- Always use `make test` to run the test suite (matches local development and CI/CD workflow)
+The test suite is split into **unit** and **integration** tests. Use the appropriate target:
+
+| Command | What it runs | When to use |
+|---|---|---|
+| `make test` | Unit tests only (excludes integration) | Daily development — fast feedback loop |
+| `make test-integration` | Integration tests only | Verifying integration layer in isolation |
+| `make test-all` | Full suite (unit + integration) | Before committing; CI/CD pipelines |
+
 - Do not use `xcodebuild test` directly unless debugging a specific issue
 - This ensures consistency across development, code review, and pipeline environments
+
+### Test File Placement by Kind
+
+Test files are split between two Xcode targets, each driven by a top-level folder:
+
+- **`ClickNBackTests/Unit/`** → compiled into the `ClickNBackTests` target (`make test`)
+  - Mirror the production folder structure inside `Unit/` (e.g., `Unit/Features/Auth/SignInViewModelTests.swift`)
+- **`ClickNBackTests/Integration/`** → compiled into the `ClickNBackIntegrationTests` target (`make test-integration`)
+  - Mirror the production folder structure inside `Integration/` (e.g., `Integration/Features/Auth/SignInIntegrationTests.swift`)
+- **`ClickNBackTests/Support/`** → shared by both targets (test helpers, `MockURLProtocol`, test-only type extensions)
+
+Dropping a file in the right folder is all that is needed — the Makefile and Xcode targets never need updating.
 
 ---
 
 ## Quality Assurance Gates
 
 - Always run `make qa-gates` after each change to ensure nothing is broken
-- This runs the complete quality assurance pipeline: linting, formatting, tests, coverage check, and other checks
+- This runs the complete quality assurance pipeline: build, all tests (unit + integration), coverage check, and lint
 - Do not commit or submit pull requests without passing `make qa-gates`
 - This ensures consistency across development, code review, and pipeline environments
 

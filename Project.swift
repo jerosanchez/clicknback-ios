@@ -30,7 +30,24 @@ let project = Project(
             product: .unitTests,
             bundleId: "com.jerosanchez.clicknback.tests",
             deploymentTargets: .iOS("26.0"),
-            sources: "ClickNBackTests/**",
+            sources: ["ClickNBackTests/Unit/**", "ClickNBackTests/Support/**"],
+            dependencies: [
+                .target(name: "ClickNBack"),
+            ],
+            settings: .settings(
+                base: [
+                    "SWIFT_VERSION": "6.0",
+                    "SWIFT_STRICT_CONCURRENCY_ENABLED": "COMPLETE",
+                ]
+            )
+        ),
+        .target(
+            name: "ClickNBackIntegrationTests",
+            destinations: .iOS,
+            product: .unitTests,
+            bundleId: "com.jerosanchez.clicknback.integration-tests",
+            deploymentTargets: .iOS("26.0"),
+            sources: ["ClickNBackTests/Integration/**", "ClickNBackTests/Support/**"],
             dependencies: [
                 .target(name: "ClickNBack"),
             ],
@@ -62,9 +79,12 @@ let project = Project(
     schemes: [
         .scheme(
             name: "ClickNBack-Dev",
-            buildAction: .buildAction(targets: ["ClickNBack", "ClickNBackTests", "ClickNBackUITests"]),
+            buildAction: .buildAction(targets: ["ClickNBack", "ClickNBackTests", "ClickNBackIntegrationTests", "ClickNBackUITests"]),
             testAction: .targets(
-                [.testableTarget(target: .target("ClickNBackTests"))],
+                [
+                    .testableTarget(target: .target("ClickNBackTests")),
+                    .testableTarget(target: .target("ClickNBackIntegrationTests")),
+                ],
                 options: .options(coverage: true, codeCoverageTargets: [.target("ClickNBack")])
             )
         ),
