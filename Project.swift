@@ -20,6 +20,7 @@ let project = Project(
                     "SWIFT_VERSION": "6.0",
                     "SWIFT_DEFAULT_ACTOR_ISOLATION": "MainActor",
                     "SWIFT_STRICT_CONCURRENCY_ENABLED": "COMPLETE",
+                    "DEVELOPMENT_LANGUAGE": "en",
                 ]
             )
         ),
