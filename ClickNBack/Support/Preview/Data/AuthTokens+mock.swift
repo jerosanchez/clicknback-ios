@@ -1,5 +1,6 @@
 //
 
+// swiftlint:disable line_length
 extension AuthTokens {
     public static var mock: AuthTokens {
         AuthTokens(
@@ -8,3 +9,4 @@ extension AuthTokens {
         )
     }
 }
+// swiftlint:enable line_length

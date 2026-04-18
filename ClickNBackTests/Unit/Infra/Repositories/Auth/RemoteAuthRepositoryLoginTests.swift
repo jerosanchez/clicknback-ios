@@ -50,7 +50,7 @@ struct RemoteAuthRepositoryLoginTests {
             return
         }
     }
-    
+
     @Test
     func login_returnsServerError_onServerError() async {
         // Arrange
@@ -172,4 +172,3 @@ struct RemoteAuthRepositoryLoginTests {
         RemoteAuthRepository(apiClient: apiClient ?? makeAPIClient())
     }
 }
-

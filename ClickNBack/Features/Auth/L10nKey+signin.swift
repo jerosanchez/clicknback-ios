@@ -2,6 +2,7 @@
 
 import Foundation
 
+// swiftlint:disable nesting
 extension L10nKey {
     enum SignIn {
         enum Screen {
@@ -9,13 +10,13 @@ extension L10nKey {
             static let offlineBanner = LocalizedStringResource("signin.screen.offline_banner", table: "SignIn")
             static let waitingMessage = LocalizedStringResource("signin.screen.waiting", table: "SignIn")
         }
-        
+
         enum Form {
             static let emailField = LocalizedStringResource("signin.form.emailField", table: "SignIn")
             static let passwordField = LocalizedStringResource("signin.form.passwordField", table: "SignIn")
             static let button = LocalizedStringResource("signin.form.button", table: "SignIn")
         }
-        
+
         enum Result {
             static let successMessage = LocalizedStringResource("signin.result.success", table: "SignIn")
             static let errorMessage = LocalizedStringResource("signin.result.error", table: "SignIn")
@@ -25,3 +26,4 @@ extension L10nKey {
         }
     }
 }
+// swiftlint:enable nesting

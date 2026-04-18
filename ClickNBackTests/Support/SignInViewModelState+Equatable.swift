@@ -7,8 +7,8 @@ extension SignInViewModel.State: @retroactive Equatable {
         switch (lhs, rhs) {
         case (.idle, .idle), (.loading, .loading), (.success, .success):
             return true
-        case (.error(let l), .error(let r)):
-            return l == r
+        case (.error(let lhsError), .error(let rhsError)):
+            return lhsError == rhsError
         default:
             return false
         }

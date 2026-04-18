@@ -3,9 +3,9 @@
 import Foundation
 
 public final class MockAPIClient: APIClient {
-    
+
     // MARK: - Spy Properties
-    
+
     public var requestHistory: [(endpoint: String, method: String)] = []
     public var mockResponses: [String: Any] = [:]
     public var mockError: APIClientError?
@@ -13,7 +13,7 @@ public final class MockAPIClient: APIClient {
     public init() {}
 
     // MARK: - API
-    
+
     public func request<T: Decodable>(apiRequest: APIRequest) async -> Result<T, APIClientError> {
         requestHistory.append((endpoint: apiRequest.endpoint, method: String(describing: apiRequest.method)))
 
@@ -26,7 +26,9 @@ public final class MockAPIClient: APIClient {
         }
 
         let emptyData = Data("{}".utf8)
-        let decoded = try! JSONDecoder().decode(T.self, from: emptyData)
+        guard let decoded = try? JSONDecoder().decode(T.self, from: emptyData) else {
+            return .failure(.decodingError)
+        }
         return .success(decoded)
     }
 

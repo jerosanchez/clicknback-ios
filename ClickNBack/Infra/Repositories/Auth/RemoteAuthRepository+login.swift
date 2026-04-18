@@ -42,7 +42,7 @@ extension RemoteAuthRepository {
                 return .failure(.requestTimeout)
             case .noConnection:
                 return .failure(.noConnectivity)
-            case .serverError(_):
+            case .serverError:
                 return .failure(.serverError)
             default:
                 return .failure(.unexpectedError(error))

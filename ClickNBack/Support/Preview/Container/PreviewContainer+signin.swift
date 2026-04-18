@@ -9,7 +9,7 @@ extension PreviewContainer {
     ) -> some View {
         let authRepository = MockAuthRepository()
         authRepository.loginHandler = loginHandler
-        
+
         return SignInScreen(
             viewModel: SignInViewModel(
                 loginUseCase: LoginUseCase(
@@ -21,7 +21,7 @@ extension PreviewContainer {
         )
         .environment(\.locale, appLanguage.locale)
     }
-    
+
     static func signInFormView(
         appLanguage: AppLanguage = .english
     ) -> some View {
@@ -36,9 +36,7 @@ extension PreviewContainer {
         )
         .environment(\.locale, appLanguage.locale)
     }
-            
-        
-    
+
     static func signInResultView(
         state: SignInViewModel.State = .success,
         appLanguage: AppLanguage = .english

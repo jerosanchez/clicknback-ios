@@ -34,7 +34,7 @@ struct PublicAPIClientTests {
     @Test
     func request_returnsDecodingError_onInvalidJSON() async {
         // Arrange
-        MockURLProtocol.stub(data: "not valid json".data(using: .utf8)!, statusCode: 200)
+        MockURLProtocol.stub(data: Data("not valid json".utf8), statusCode: 200)
         let sut = makeSUT()
         let apiRequest = MockAPIRequest(endpoint: "/items")
 
@@ -52,7 +52,7 @@ struct PublicAPIClientTests {
     func request_returnsAPIError_onStatusCodesInClientErrorRange() async {
         for statusCode in [400, 450, 499] {
             // Arrange
-            let errorData = "Error response".data(using: .utf8)!
+            let errorData = Data("Error response".utf8)
             MockURLProtocol.stub(data: errorData, statusCode: statusCode)
             let sut = makeSUT()
             let apiRequest = MockAPIRequest(endpoint: "/items")

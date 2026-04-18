@@ -30,13 +30,13 @@ final class MockURLProtocol: URLProtocol {
         lastRequest = nil
     }
 
-    override class func canInit(with request: URLRequest) -> Bool { true }
+    override static func canInit(with request: URLRequest) -> Bool { true }
 
-    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+    override static func canonicalRequest(for request: URLRequest) -> URLRequest { request }
 
     override func startLoading() {
         var capturedRequest = request
-        
+
         if let stream = request.httpBodyStream {
             stream.open()
             var bodyData = Data()
@@ -49,7 +49,7 @@ final class MockURLProtocol: URLProtocol {
             stream.close()
             capturedRequest.httpBody = bodyData
         }
-        
+
         MockURLProtocol.lastRequest = capturedRequest
 
         if let error = MockURLProtocol.stubbedError {

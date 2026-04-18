@@ -30,16 +30,16 @@ public final class LoginUseCase {
         case let .success(authTokens):
         do {
             try tokenStorage.set(
-                authTokens.accessToken, 
+                authTokens.accessToken,
                 forKey: AuthTokensStorageKey.authAccessToken.rawValue
             )
             try tokenStorage.set(
-                authTokens.refreshToken, 
+                authTokens.refreshToken,
                 forKey: AuthTokensStorageKey.authRefreshToken.rawValue
             )
             return .success
         } catch {
-            // TODO: Log this error, since it shouldn't happen under normal circumstances 
+            // TODO: Log this error, since it shouldn't happen under normal circumstances
             // and indicates a problem with the storage mechanism
             return .unexpectedError
         }

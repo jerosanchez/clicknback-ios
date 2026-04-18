@@ -50,7 +50,7 @@ struct LoginUseCaseTests {
         // Assert
         #expect(result == .badCredentials)
     }
-    
+
     @Test
     func execute_returnsServerError_onServerError() async {
         // Arrange

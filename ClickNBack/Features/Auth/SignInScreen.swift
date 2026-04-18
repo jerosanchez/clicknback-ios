@@ -3,7 +3,7 @@
 import SwiftUI
 
 struct SignInScreen: View {
-    
+
     @State var viewModel: SignInViewModel
 
     var body: some View {

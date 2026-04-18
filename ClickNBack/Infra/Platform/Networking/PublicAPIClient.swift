@@ -46,7 +46,9 @@ public final class PublicAPIClient: APIClient {
         }
 
         guard let httpResponse = response as? HTTPURLResponse else {
-            return .failure(.unknownError(NSError(domain: "Networking", code: 666, userInfo: [NSLocalizedDescriptionKey: "Invalid response"])))
+            let userInfo = [NSLocalizedDescriptionKey: "Invalid response"]
+            let error = NSError(domain: "Networking", code: 666, userInfo: userInfo)
+            return .failure(.unknownError(error))
         }
 
         let statusCode = httpResponse.statusCode

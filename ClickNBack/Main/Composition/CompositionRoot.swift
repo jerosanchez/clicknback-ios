@@ -3,9 +3,9 @@
 import Foundation
 
 struct CompositionRoot {
-    
+
     // MARK: - Infrastructure
-    
+
     static var apiClient: APIClient {
         PublicAPIClient(
             baseURL: AppConfig.baseURL,

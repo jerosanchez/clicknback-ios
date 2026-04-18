@@ -15,76 +15,76 @@ struct SignInIntegrationTests {
     @Test
     func signInTapped_returnsSuccess_onValidCredentials() async {
         // Arrange
-        let (sut, _, _) = makeSUT()
+        let result = makeSUT()
         MockURLProtocol.stub(data: encoded(makeLoginSuccessResponse()), statusCode: 200)
-        sut.email = "user@example.com"
-        sut.password = "secret"
+        result.sut.email = "user@example.com"
+        result.sut.password = "secret"
 
         // Act
-        await sut.signInTapped()
+        await result.sut.signInTapped()
 
         // Assert
-        #expect(sut.state == .success)
+        #expect(result.sut.state == .success)
     }
 
     @Test
     func signInTapped_returnsBadCredentials_on401Response() async {
         // Arrange
-        let (sut, _, _) = makeSUT()
+        let result = makeSUT()
         MockURLProtocol.stub(data: Data(), statusCode: 401)
-        sut.email = "user@example.com"
-        sut.password = "wrong-password"
+        result.sut.email = "user@example.com"
+        result.sut.password = "wrong-password"
 
         // Act
-        await sut.signInTapped()
+        await result.sut.signInTapped()
 
         // Assert
-        #expect(sut.state == .error(.badCredentials))
+        #expect(result.sut.state == .error(.badCredentials))
     }
 
     @Test
     func signInTapped_returnsServerError_on500Response() async {
         // Arrange
-        let (sut, _, _) = makeSUT()
+        let result = makeSUT()
         MockURLProtocol.stub(data: Data(), statusCode: 500)
-        sut.email = "user@example.com"
-        sut.password = "secret"
+        result.sut.email = "user@example.com"
+        result.sut.password = "secret"
 
         // Act
-        await sut.signInTapped()
+        await result.sut.signInTapped()
 
         // Assert
-        #expect(sut.state == .error(.serverError))
+        #expect(result.sut.state == .error(.serverError))
     }
 
     @Test
     func signInTapped_returnsNoConnectivity_onNetworkUnavailable() async {
         // Arrange
-        let (sut, _, _) = makeSUT()
+        let result = makeSUT()
         MockURLProtocol.stub(error: URLError(.notConnectedToInternet))
-        sut.email = "user@example.com"
-        sut.password = "secret"
+        result.sut.email = "user@example.com"
+        result.sut.password = "secret"
 
         // Act
-        await sut.signInTapped()
+        await result.sut.signInTapped()
 
         // Assert
-        #expect(sut.state == .error(.noConnectivity))
+        #expect(result.sut.state == .error(.noConnectivity))
     }
 
     @Test
     func signInTapped_returnsTimeout_onRequestTimedOut() async {
         // Arrange
-        let (sut, _, _) = makeSUT()
+        let result = makeSUT()
         MockURLProtocol.stub(error: URLError(.timedOut))
-        sut.email = "user@example.com"
-        sut.password = "secret"
+        result.sut.email = "user@example.com"
+        result.sut.password = "secret"
 
         // Act
-        await sut.signInTapped()
+        await result.sut.signInTapped()
 
         // Assert
-        #expect(sut.state == .error(.timeout))
+        #expect(result.sut.state == .error(.timeout))
     }
 
     // MARK: - signInTapped – token storage
@@ -92,42 +92,46 @@ struct SignInIntegrationTests {
     @Test
     func signInTapped_storesAccessToken_onValidCredentials() async {
         // Arrange
-        let (sut, tokenStorage, _) = makeSUT()
+        let result = makeSUT()
         let response = makeLoginSuccessResponse(accessToken: "test-access-token")
         MockURLProtocol.stub(data: encoded(response), statusCode: 200)
-        sut.email = "user@example.com"
-        sut.password = "secret"
+        result.sut.email = "user@example.com"
+        result.sut.password = "secret"
 
         // Act
-        await sut.signInTapped()
+        await result.sut.signInTapped()
 
         // Assert
-        #expect(tokenStorage.value(forKey: AuthTokensStorageKey.authAccessToken.rawValue) == response.accessToken)
+        let storedAccessToken = result.tokenStorage.value(forKey: AuthTokensStorageKey.authAccessToken.rawValue)
+        #expect(storedAccessToken == response.accessToken)
     }
 
     @Test
     func signInTapped_storesRefreshToken_onValidCredentials() async {
         // Arrange
-        let (sut, tokenStorage, _) = makeSUT()
+        let result = makeSUT()
         let response = makeLoginSuccessResponse(refreshToken: "test-refresh-token")
         MockURLProtocol.stub(data: encoded(response), statusCode: 200)
-        sut.email = "user@example.com"
-        sut.password = "secret"
+        result.sut.email = "user@example.com"
+        result.sut.password = "secret"
 
         // Act
-        await sut.signInTapped()
+        await result.sut.signInTapped()
 
         // Assert
-        #expect(tokenStorage.value(forKey: AuthTokensStorageKey.authRefreshToken.rawValue) == response.refreshToken)
+        let storedRefreshToken = result.tokenStorage.value(forKey: AuthTokensStorageKey.authRefreshToken.rawValue)
+        #expect(storedRefreshToken == response.refreshToken)
     }
 
     // MARK: - Helpers
 
-    private func makeSUT() -> (
-        sut: SignInViewModel,
-        tokenStorage: MockKeyValueStorage,
-        analytics: MockAnalyticsTracker
-    ) {
+    private struct SignInSUT {
+        let sut: SignInViewModel
+        let tokenStorage: MockKeyValueStorage
+        let analytics: MockAnalyticsTracker
+    }
+
+    private func makeSUT() -> SignInSUT {
         let config = URLSessionConfiguration.ephemeral
         config.protocolClasses = [MockURLProtocol.self]
         let session = URLSession(configuration: config)
@@ -139,7 +143,7 @@ struct SignInIntegrationTests {
         let analytics = MockAnalyticsTracker()
         let sut = SignInViewModel(loginUseCase: loginUseCase, analyticsTracker: analytics)
 
-        return (sut, tokenStorage, analytics)
+        return SignInSUT(sut: sut, tokenStorage: tokenStorage, analytics: analytics)
     }
 
     private func makeLoginSuccessResponse(
@@ -156,7 +160,7 @@ struct SignInIntegrationTests {
         let dict: [String: Any] = [
             "access_token": response.accessToken,
             "refresh_token": response.refreshToken,
-            "token_type": response.tokenType,
+            "token_type": response.tokenType
         ]
         return (try? JSONSerialization.data(withJSONObject: dict)) ?? Data()
     }

@@ -3,7 +3,7 @@
 public typealias LoginHandler = (LoginCredentials) async -> LoginResult
 
 public final class MockAuthRepository: AuthRepository {
-    
+
     // MARK: - Configurable hooks (optional overrides)
 
     public var loginHandler: LoginHandler?
