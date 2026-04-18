@@ -19,9 +19,26 @@ jobs:
         with:
           xcode-version: "26.3.0"
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - name: Install dev tools
         run: |
-          make install
+          # Retry up to 3 times to handle transient network failures
+          for attempt in 1 2 3; do
+            echo "Install attempt $attempt/3..."
+            if make install; then
+              exit 0
+            fi
+            if [ $attempt -lt 3 ]; then
+              echo "Install failed, waiting 10s before retry..."
+              sleep 10
+            fi
+          done
+          echo "Install failed after 3 attempts"
+          exit 1
 
       - name: Generate Xcode project
         run: |
@@ -30,6 +47,11 @@ jobs:
       - name: Run QA Gates
         run: |
           make qa-gates
+
+      - name: Check coverage (informational)
+        continue-on-error: true
+        run: |
+          make coverage
 
       - name: Upload build logs on failure
         if: failure()
