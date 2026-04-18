@@ -9,7 +9,7 @@ struct SignInFormView: View {
         VStack {
             AppIcons.inlineBigIcon(AppIcons.authHeadingIcon)
             formFields()
-            signupButton()
+            signInButton()
         }
         .padding(AppSpacing.medium)
     }
@@ -52,11 +52,11 @@ struct SignInFormView: View {
         )
     }
 
-    private func signupButton() -> some View {
+    private func signInButton() -> some View {
         Button(
             action: {
                 Task {
-                    await viewModel.login()
+                    await viewModel.signInTapped()
                 }
             },
             label: {

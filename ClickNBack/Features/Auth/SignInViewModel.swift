@@ -19,16 +19,20 @@ class SignInViewModel {
         self.analyticsTracker = analyticsTracker
     }
     
+    enum Error {
+        case badCredentials
+        case serverError
+        case timeout
+        case noConnectivity
+    }
+    
     // MARK: State
     
     enum State {
         case idle
         case loading
         case success
-        case badCredentials
-        case serverError
-        case timeout
-        case noConnectivity
+        case error(Error)
     }
 
     var email: String = ""
@@ -36,23 +40,28 @@ class SignInViewModel {
 
     private(set) var state: State = .idle
     
+    var isLoading: Bool {
+        switch state {
+        case .loading: true
+        default: false
+        }
+    }
+    
     // MARK: API
     
     func onAppear() {
         track(.loginScreenShowed)
     }
     
-    func login() async {
+    func signInTapped() async {
         state = .loading
-
+        
         let credentials = LoginCredentials(email: email, password: password)
         let loginResult = await loginUseCase.execute(with: credentials)
-
+        
         state = loginResult.toState()
         
-        if state == .success {
-            track(.loginSucceeded(email: credentials.email))
-        }
+        trackLoginResultIfNeeded(for: credentials)
     }
     
     // MARK: - Helpers
@@ -60,6 +69,15 @@ class SignInViewModel {
     private func track(_ event: SignInAnalyticsEvents) {
         Task {
             await analyticsTracker.track(event)
+        }
+    }
+    
+    private func trackLoginResultIfNeeded(for credentials: LoginCredentials) {
+        switch state {
+        case .success:
+            track(.loginSucceeded(email: credentials.email))
+        default:
+            break
         }
     }
 }
@@ -72,15 +90,15 @@ private extension LoginUseCaseResult {
         case .success:
             return .success
         case .badCredentials:
-            return .badCredentials
+            return .error(.badCredentials)
         case .serverError:
-            return .serverError
+            return .error(.serverError)
         case .requestTimeout:
-            return .timeout
+            return .error(.timeout)
         case .noConnectivity:
-            return .noConnectivity
+            return .error(.noConnectivity)
         case .unexpectedError:
-            return .serverError
+            return .error(.serverError)
         }
     }
 }

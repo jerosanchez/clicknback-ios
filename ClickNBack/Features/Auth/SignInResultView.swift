@@ -16,25 +16,25 @@ struct SignInResultView: View {
                     withIcon: AppIcons.Status.success,
                     color: AppColors.Status.success
                 )
-            case .badCredentials:
+            case .error(.badCredentials):
                 resultView(
                     message: "Wrong user or password.\nPlease, try again.",
                     withIcon: AppIcons.Status.error,
                     color: AppColors.Status.error
                 )
-            case .serverError:
+            case .error(.serverError):
                 resultView(
                     message: "There's a problem in our side.\nPlease try again later.",
                     withIcon: AppIcons.Status.error,
                     color: AppColors.Status.error
                 )
-            case .timeout:
+            case .error(.timeout):
                 resultView(
                     message: "The operation is taking too long;\nMaybe be connectivity issues?\nPlease try again later.",
                     withIcon: AppIcons.Status.warning,
                     color: AppColors.Status.warning
                 )
-            case .noConnectivity:
+            case .error(.noConnectivity):
                 resultView(
                     message: "No internet connection.\nPlease check your connection and try again.",
                     withIcon: AppIcons.Status.warning,
@@ -63,17 +63,17 @@ struct SignInResultView: View {
 }
 
 #Preview("Bad Credentials") {
-    SignInResultView(state: .badCredentials)
+    SignInResultView(state: .error(.badCredentials))
 }
 
 #Preview("Server Error") {
-    SignInResultView(state: .serverError)
+    SignInResultView(state: .error(.serverError))
 }
 
-#Preview("Tiemout") {
-    SignInResultView(state: .timeout)
+#Preview("Timeout") {
+    SignInResultView(state: .error(.timeout))
 }
 
 #Preview("No Connectivity") {
-    SignInResultView(state: .noConnectivity)
+    SignInResultView(state: .error(.noConnectivity))
 }
