@@ -12,31 +12,31 @@ struct SignInResultView: View {
                 EmptyView()
             case .success:
                 resultView(
-                    message: "Sign in successful",
+                    message: L10nKey.SignIn.Result.successMessage,
                     withIcon: AppIcons.Status.success,
                     color: AppColors.Status.success
                 )
             case .error(.badCredentials):
                 resultView(
-                    message: "Wrong user or password.\nPlease, try again.",
+                    message: L10nKey.SignIn.Result.badCredentialsMessage,
                     withIcon: AppIcons.Status.error,
                     color: AppColors.Status.error
                 )
             case .error(.serverError):
                 resultView(
-                    message: "There's a problem in our side.\nPlease try again later.",
+                    message: L10nKey.SignIn.Result.errorMessage,
                     withIcon: AppIcons.Status.error,
                     color: AppColors.Status.error
                 )
             case .error(.timeout):
                 resultView(
-                    message: "The operation is taking too long;\nMaybe be connectivity issues?\nPlease try again later.",
+                    message: L10nKey.SignIn.Result.timeoutMessage,
                     withIcon: AppIcons.Status.warning,
                     color: AppColors.Status.warning
                 )
             case .error(.noConnectivity):
                 resultView(
-                    message: "No internet connection.\nPlease check your connection and try again.",
+                    message: L10nKey.SignIn.Result.noConnectivityMessage,
                     withIcon: AppIcons.Status.warning,
                     color: AppColors.Status.warning
                 )
@@ -59,21 +59,25 @@ struct SignInResultView: View {
 }
 
 #Preview("Success") {
-    SignInResultView(state: .success)
+    PreviewContainer.signInResultView(state: .success)
+}
+
+#Preview("Success (ES)") {
+    PreviewContainer.signInResultView(state: .success, appLanguage: .spanish)
 }
 
 #Preview("Bad Credentials") {
-    SignInResultView(state: .error(.badCredentials))
+    PreviewContainer.signInResultView(state: .error(.badCredentials))
 }
 
 #Preview("Server Error") {
-    SignInResultView(state: .error(.serverError))
+    PreviewContainer.signInResultView(state: .error(.serverError))
 }
 
 #Preview("Timeout") {
-    SignInResultView(state: .error(.timeout))
+    PreviewContainer.signInResultView(state: .error(.timeout))
 }
 
 #Preview("No Connectivity") {
-    SignInResultView(state: .error(.noConnectivity))
+    PreviewContainer.signInResultView(state: .error(.noConnectivity))
 }

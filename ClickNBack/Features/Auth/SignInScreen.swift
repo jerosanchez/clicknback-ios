@@ -14,7 +14,7 @@ struct SignInScreen: View {
                 Spacer()
             }
             .padding(AppSpacing.medium)
-            .navigationTitle("Sign In")
+            .navigationTitle(L10nKey.SignIn.Screen.title)
             .disabled(viewModel.isLoading)
         }
         .overlay(alignment: .center) {
@@ -34,7 +34,7 @@ struct SignInScreen: View {
 
             VStack(spacing: AppSpacing.large) {
                 ProgressView()
-                Text("Signing in...")
+                Text(L10nKey.SignIn.Screen.waitingMessage)
                     .font(AppTypography.Body.medium)
                     .foregroundColor(AppColors.Text.primary)
             }

@@ -23,7 +23,7 @@ struct SignInFormView: View {
     }
 
     private func emailField() -> some View {
-        TextField("Email", text: Binding(
+        TextField(L10nKey.SignIn.Form.emailField, text: Binding(
             get: { viewModel.email },
             set: { viewModel.email = $0 }
         ))
@@ -39,7 +39,7 @@ struct SignInFormView: View {
     }
 
     private func passwordField() -> some View {
-        SecureField("Password", text: Binding(
+        SecureField(L10nKey.SignIn.Form.passwordField, text: Binding(
             get: { viewModel.password },
             set: { viewModel.password = $0 }
         ))
@@ -62,7 +62,7 @@ struct SignInFormView: View {
             label: {
                 HStack {
                     Image(systemName: AppIcons.signinButton)
-                    Text("Sign In")
+                    Text(L10nKey.SignIn.Form.button)
                         .font(AppTypography.Label.large)
                         .fontWeight(.semibold)
                 }
@@ -83,6 +83,5 @@ struct SignInFormView: View {
 }
 
 #Preview {
-    PreviewContainer.signInScreen()
+    PreviewContainer.signInFormView()
 }
-
