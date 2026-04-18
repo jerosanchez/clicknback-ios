@@ -8,7 +8,7 @@ public enum LogLevel: String {
     case warning
     case error
 
-    var emoji: String {
+    public var emoji: String {
         switch self {
         case .debug: "🔵"
         case .info: "🟢"
