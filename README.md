@@ -4,55 +4,33 @@
 [![Xcode](https://img.shields.io/badge/Xcode-26.4%2B-blue?logo=xcode)](https://developer.apple.com/xcode/)
 [![Swift](https://img.shields.io/badge/Swift-6.0%2B-orange?logo=swift)](https://swift.org)
 
-This repository contains the companion iOS client app for the [ClickNBack cashback platform](https://github.com/jerosanchez/clicknback). It provides a native mobile experience for users to access cashback offers, manage their profile, and interact with the ClickNBack backend services.
+Native iOS client for the [ClickNBack cashback platform](https://github.com/jerosanchez/clicknback). Users earn cashback on purchases at partner merchants — this app lets them browse offers, track their wallet, and manage their profile.
 
 ---
 
-## 🚀 Getting Started
+## Architecture
 
-Follow these steps to set up and run the project locally:
+The app follows **Clean Architecture + MVVM** with strict inward dependency rules across five layers:
 
-### 1. Prerequisites
-- **Xcode 26.4+** (install from the [Mac App Store](https://apps.apple.com/app/xcode/id497799835?mt=12))
-- **Homebrew** (https://brew.sh)
-- **Tuist** (for project generation)
-- **SwiftFormat** and **SwiftLint** (for code style)
-
-### 2. Install Dependencies
-
-Open a terminal in the project root and run:
-
-```sh
-make install
+```text
+Features (MVVM)     SwiftUI views + @Observable ViewModels
+       ↓
+Data (Domain)       Use cases, repository protocols, domain models
+       ↓
+Infra               Remote repositories, API client, storage implementations
+       ↕
+Main/Composition    CompositionRoot — the only place layers are wired together
+       ↕
+Platform            Cross-cutting protocols: APIClient, KeyValueStorage, Logger, Analytics
 ```
-This will:
-- Install SwiftFormat and SwiftLint (if missing)
-- Generate the Xcode project using Tuist
 
-### 3. Open the Project
-
-```sh
-make open
-```
-This opens the workspace in Xcode.
-
-### 4. Build & Run
-- Select the `ClickNBack-Dev` scheme (or `ClickNBack` if not present)
-- Choose a simulator (default: iPhone 17)
-- Press **Run** (▶️) in Xcode
+- **Swift 6** strict concurrency — `@MainActor` applied project-wide
+- **SwiftUI** only, targeting **iOS 26.0+**
+- **Tuist** manages the Xcode project (`Project.swift` → `make generate`)
+- **Swift Testing** for all tests (`import Testing`, never XCTest)
 
 ---
 
-## 🧹 Code Quality
+## Contributing
 
-- **Format code:** `make format`
-- **Lint code:** `make lint`
-- **Run tests:** `make test`
-
----
-
-## 🛠️ Project Maintenance
-
-- **Regenerate project:** `make regenerate`
-- **Clean artifacts:** `make clean-artifacts`
-- **Full cleanup:** `make clean-all`
+See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, development workflow, and code quality gates.
