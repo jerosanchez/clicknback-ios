@@ -46,6 +46,30 @@ struct <Screen>Screen: View {
     }
 }
 
+// Screen previews ALWAYS use PreviewContainer — never instantiate ViewModel directly in #Preview.
+// Simple view components (subviews / building blocks) may use a plain #Preview directly.
+//
+// File: ClickNBack/Support/Preview/Container/PreviewContainer+<feature>.swift
+//
+// extension PreviewContainer {
+//     static func <screen>Screen(
+//         appLanguage: AppLanguage = .english
+//     ) -> some View {
+//         <Screen>Screen(
+//             viewModel: <Screen>ViewModel(
+//                 <useCase>: <Action>UseCase(...),
+//                 analyticsTracker: MockAnalyticsTracker()
+//             )
+//         )
+//         .environment(\.locale, appLanguage.locale)
+//     }
+// }
+//
+// Then in <Screen>Screen.swift:
+// #Preview {
+//     PreviewContainer.<screen>Screen()
+// }
+
 // MARK: - Analytics Events
 // File: ClickNBack/Features/<Feature>/<Feature>AnalyticsEvent.swift
 
