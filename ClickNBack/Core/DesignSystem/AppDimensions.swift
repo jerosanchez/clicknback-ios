@@ -3,6 +3,14 @@
 import SwiftUI
 
 public enum AppDimensions {
+    // MARK: - Splash Screen
+
+    enum Splash {
+        static let iconSize: CGFloat = 120 // primary outer icon
+        static let overlayIconSize: CGFloat = 44 // secondary overlay icon
+        static let appNameLetterSpacing: CGFloat = 2
+    }
+
     // MARK: - Corner Radius
 
     enum CornerRadius {

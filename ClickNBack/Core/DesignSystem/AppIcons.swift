@@ -3,6 +3,11 @@
 import SwiftUI
 
 public enum AppIcons {
+    // MARK: - Splash Icons
+
+    static var splashPrimary = "arrow.2.circlepath"
+    static var splashSecondary = "dollarsign"
+
     // MARK: - Authentication Icons
 
     static var authHeadingIcon = "lock.shield.fill"
