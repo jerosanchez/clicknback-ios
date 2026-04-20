@@ -1,0 +1,56 @@
+name: Task / Technical Debt
+description: Engineering work that isn't a bug or user-facing feature
+title: "[Task]: "
+labels: ["chores"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for refactors, dependency upgrades, test coverage improvements, CI changes, and other engineering tasks.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What needs to be done?
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Why does this matter? What risk, debt, or friction does it address?
+    validations:
+      required: true
+
+  - type: textarea
+    id: done
+    attributes:
+      label: Definition of Done
+      description: Concrete, verifiable outcomes.
+      placeholder: |
+        - [ ] …
+        - [ ] All tests pass (`make qa-gates`)
+        - [ ] No new SwiftLint warnings introduced
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - Low (nice to have)
+        - Medium (should do soon)
+        - High (blocking or urgent)
+    validations:
+      required: false
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional Notes
+      description: Related issues, relevant links, or implementation hints.
+    validations:
+      required: false

@@ -1,0 +1,87 @@
+name: Bug Report
+description: Something isn't working as expected
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report. The more context you provide, the faster we can fix it.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of what the bug is and its impact on users.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Exact steps to reproduce the behaviour.
+      placeholder: |
+        1. Open the app
+        2. Navigate to …
+        3. Tap …
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What should happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happens? Include error messages or stack traces if available.
+    validations:
+      required: true
+
+  - type: input
+    id: ios-version
+    attributes:
+      label: iOS Version
+      placeholder: "e.g. iOS 18.3"
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: Device / Simulator
+      placeholder: "e.g. iPhone 16 Pro Simulator"
+    validations:
+      required: true
+
+  - type: input
+    id: app-build
+    attributes:
+      label: App Build
+      placeholder: "e.g. 1.2.0 (42)"
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / Stack Trace
+      description: Paste any relevant console output, crash logs, or stack traces.
+      render: text
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Screenshots, screen recordings, related PRs, or any other relevant information.
+    validations:
+      required: false
