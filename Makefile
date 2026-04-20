@@ -56,9 +56,16 @@ check-swiftlint:
 		exit 1; \
 	}
 
+check-markdownlint:
+	@command -v markdownlint >/dev/null 2>&1 || { \
+		echo "$(COLOR_YELLOW)Error: markdownlint-cli not found. Install via:$(COLOR_RESET)"; \
+		echo "  brew install markdownlint-cli"; \
+		exit 1; \
+	}
+
 install: check-homebrew
 	@echo "$(COLOR_BLUE)Installing dev tools...$(COLOR_RESET)"
-	brew install swiftformat swiftlint tuist
+	brew install swiftformat swiftlint tuist markdownlint-cli
 	@$(MAKE) generate
 	@echo ""
 	@echo "$(COLOR_GREEN)✓ Setup complete. Run 'make open' to open the project in Xcode.$(COLOR_RESET)"
@@ -88,7 +95,7 @@ open: check-xcode
 
 # coverage is not mandatory as a QA gate yet, it runs separately as informational in CI, 
 # so we don't fail the gate if it doesn't pass
-qa-gates: build lint test-all
+qa-gates: build lint lint-md test-all
 	@echo "$(COLOR_GREEN)✓ All QA gates passed$(COLOR_RESET)"
 
 # ============================================================================
@@ -166,6 +173,11 @@ lint: check-swiftlint
 	@echo "$(COLOR_BLUE)Running SwiftLint...$(COLOR_RESET)"
 	swiftlint lint --quiet ClickNBack/ ClickNBackTests/ ClickNBackUITests/
 	@echo "$(COLOR_GREEN)✓ SwiftLint completed$(COLOR_RESET)"
+
+lint-md: check-markdownlint
+	@echo "$(COLOR_BLUE)Running markdownlint...$(COLOR_RESET)"
+	markdownlint '**/*.md' --ignore node_modules --ignore build
+	@echo "$(COLOR_GREEN)✓ Markdown lint completed$(COLOR_RESET)"
 
 # ============================================================================
 # CLEANUP

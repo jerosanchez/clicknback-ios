@@ -1,0 +1,74 @@
+name: Feature Request
+description: Propose a new feature or improvement
+title: "[Feature]: "
+labels: ["feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for new features, UX improvements, or technical enhancements.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What should be built and why? One paragraph is enough.
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation / Context
+      description: |
+        Why is this needed now? What problem does it solve for users or the team?
+        Include any relevant metrics, user feedback, or technical debt context.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: What does "done" look like? Use checkboxes.
+      placeholder: |
+        - [ ] User can …
+        - [ ] The app handles … gracefully
+        - [ ] Tests cover …
+    validations:
+      required: true
+
+  - type: dropdown
+    id: layer
+    attributes:
+      label: Affected Architecture Layer(s)
+      description: Which layer(s) will need changes?
+      multiple: true
+      options:
+        - Features (UI / ViewModel)
+        - Data (Domain / Use Cases)
+        - Infra (Repositories / API)
+        - Platform (Protocols / Cross-cutting)
+        - Main / Composition
+        - DesignSystem / Core
+        - Tests
+    validations:
+      required: false
+
+  - type: textarea
+    id: technical
+    attributes:
+      label: Technical Notes
+      description: |
+        Key protocols, types, or components involved. Open questions, dependencies, or constraints.
+        Not required — add only if you already have a design in mind.
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Other approaches that were considered and why this one was chosen.
+    validations:
+      required: false
