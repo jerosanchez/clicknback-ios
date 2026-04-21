@@ -15,6 +15,9 @@ Scaffold feature: $ARGUMENTS
 4. **Feature** (`ClickNBack/Features/<Feature>/`) — Create ViewModel (with `State` enum), Screen, subviews, analytics event enum, and `.xcstrings` catalog; use `templates/feature.swift`
    - **Views `#Preview`**: always via `PreviewContainer` — add a `static func <screen>Screen(...)` extension in `ClickNBack/Support/Preview/Container/PreviewContainer+<feature>.swift` and call it from the `#Preview` block; never instantiate the ViewModel directly inside `#Preview`
 5. **Composition** (`ClickNBack/Main/Composition/`) — Add `<Screen>Container.swift` and wire in `CompositionRoot.swift`; use `templates/composition.swift`
+   - **`Composition/` is for wiring only** — `CompositionRoot.swift` + `<Screen>Container.swift` files; never put startup tasks here
+   - If the feature requires a startup task (e.g. pre-loading data on launch), place the concrete `<Action>StartupTask.swift` in `Main/Startup/` and register it in `CompositionRoot.startupTasks(appState:)`
+   - **Every screen that has a ViewModel must have a matching `<Screen>Container`** — never instantiate a ViewModel or inject dependencies directly inside a `View` body or `#Preview` block; the container is the only place where `CompositionRoot` properties are read and wired into the ViewModel constructor
 6. **Mock** (`ClickNBack/Support/Mocks/`) — Add `Mock<Feature>Repository.swift` (public, configurable via handler closures)
 7. **Tests** — Follow the `write-tests` skill for unit + integration coverage of use case, ViewModel, and repository
 8. **Validate** — Run `make generate` (new files added), then `make qa-gates`

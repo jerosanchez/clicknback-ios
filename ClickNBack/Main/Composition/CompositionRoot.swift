@@ -35,4 +35,15 @@ struct CompositionRoot {
             ]
         )
     }
+
+    // MARK: - Startup
+
+    static func startupTasks(appState: AppState) -> [any StartupTask] {
+        [
+            CheckAuthStatusStartupTask(
+                useCase: CheckAuthStatusUseCase(tokenStorage: secureStorage),
+                appState: appState
+            )
+        ]
+    }
 }

@@ -8,7 +8,9 @@ struct ClickNBackApp: App {
 
     var body: some Scene {
         WindowGroup {
-            SignInContainer()
+            RootContainer(
+                startupTasks: CompositionRoot.startupTasks(appState: appState)
+            )
             .environment(appState)
             .environment(\.locale, appState.language.locale)
         }
