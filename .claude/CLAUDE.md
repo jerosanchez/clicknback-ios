@@ -47,7 +47,8 @@ ClickNBack/
 │   ├─ AppConfig.swift          Environment enum + baseURL per environment
 │   ├─ AppState.swift           @Observable global app state
 │   ├─ ClickNBackApp.swift      @main entry point
-│   └─ Composition/             CompositionRoot.swift + <Screen>Container.swift per feature
+│   ├─ Composition/             CompositionRoot.swift + <Screen>Container.swift per feature (wiring only)
+│   └─ Startup/                 Concrete StartupTask implementations (app lifecycle, not wiring)
 └─ Support/
     ├─ Mocks/                   Public reusable mocks (tests AND SwiftUI previews)
     └─ Preview/                 SwiftUI preview helpers and sample data
@@ -160,7 +161,8 @@ See the `write-tests` skill for full guidelines. Quick reference:
 
 - **Don't edit `project.pbxproj`** — run `make generate` after creating files
 - **Don't import across layers** — Features must not import Infra types
-- **Don't wire dependencies inside Views** — use a `Container` view in `Main/Composition/`
+- **Don't wire dependencies inside Views** — use a `Container` view in `Main/Composition/`; every screen with a ViewModel gets its own `<Screen>Container` — never instantiate a ViewModel directly inside a `View` body or a `#Preview` block
+- **Don't put startup tasks in `Composition/`** — lifecycle tasks belong in `Main/Startup/`; `Composition/` is for wiring only
 - **Don't use `UserDefaults` for tokens** — use `CompositionRoot.secureStorage`
 - **Don't add private inline mocks** — add to `ClickNBack/Support/Mocks/` for reuse
 
@@ -183,3 +185,14 @@ See the `write-tests` skill for full guidelines. Quick reference:
 | Agent | Description |
 |---|---|
 | `ios-reviewer` | Read-only code review with structured report |
+
+---
+
+## GitHub Collaboration Policy
+
+All GitHub operations performed by AI tools (comments on issues, PR descriptions, review comments) **must be posted using the developer's personal GitHub account**, never an AI/bot account.
+
+- The MCP GitHub tool authenticates with the developer's token — this is correct by design
+- **Never** use a separate bot token or impersonate a different account
+- Comments must represent the developer's voice and be accountable to them
+- Rationale: audit trails, code review accountability, and team trust require that every action on GitHub is traceable to a real person

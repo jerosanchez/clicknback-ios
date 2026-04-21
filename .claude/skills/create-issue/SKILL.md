@@ -16,6 +16,8 @@ Create a GitHub issue for: $ARGUMENTS
 5. **Create** — Call the GitHub MCP tool (`mcp__github__create_issue`) with `owner`, `repo`, `title`, `body`, and `labels`
 6. **Confirm** — Share the created issue URL and number with the user
 
+> **Attribution rule**: all GitHub operations (issue creation, comments, PR updates) must use the developer's personal GitHub token — never a bot account. The MCP tool authenticates as the developer by default; do not override this.
+
 ## PR Split Guidelines
 
 Every issue must include a **Proposed PR Split** section. Group changes so that:
