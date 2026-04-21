@@ -24,6 +24,15 @@ from typing import Optional
 LOGS_DIR  = "build/Logs/Test"
 BAR_WIDTH = 40
 
+# Files excluded from coverage measurement.
+# Rationale:
+#   - Derived/Sources/  — Tuist-generated asset/bundle accessors; not authored code
+#   - Support/Preview/  — Xcode canvas helpers; never executed in production or tests
+EXCLUDED_PATH_FRAGMENTS = [
+    "/Derived/Sources/",
+    "/Support/Preview/",
+]
+
 RESET  = "\033[0m"
 BOLD   = "\033[1m"
 GREEN  = "\033[32m"
@@ -60,10 +69,16 @@ def load_coverage_json(bundle: Path) -> dict:
     return json.loads(result.stdout)
 
 
+def is_excluded(file_path: str) -> bool:
+    """Return True if the file should be omitted from coverage measurement."""
+    return any(fragment in file_path for fragment in EXCLUDED_PATH_FRAGMENTS)
+
+
 def compute_coverage(data: dict) -> float:
     """
-    Compute line coverage percentage for app targets only, excluding
-    *Tests and *UITests bundles that appear in the xccov report.
+    Compute line coverage percentage for app targets only, excluding:
+    - *Tests and *UITests bundles that appear in the xccov report
+    - Files matched by EXCLUDED_PATH_FRAGMENTS (generated code, preview helpers)
     """
     targets = data.get("targets", [])
     app_targets = [
@@ -71,8 +86,13 @@ def compute_coverage(data: dict) -> float:
         if "Tests" not in t.get("name", "") and "UITests" not in t.get("name", "")
     ]
     if app_targets:
-        total   = sum(t.get("executableLines", 0) for t in app_targets)
-        covered = sum(t.get("coveredLines",    0) for t in app_targets)
+        total = covered = 0
+        for t in app_targets:
+            for f in t.get("files", []):
+                if is_excluded(f.get("path", "")):
+                    continue
+                total   += f.get("executableLines", 0)
+                covered += f.get("coveredLines",    0)
         return (covered / total * 100) if total > 0 else 0.0
     # Fall back to the top-level lineCoverage field (0.0–1.0 scale)
     return data.get("lineCoverage", 0.0) * 100
