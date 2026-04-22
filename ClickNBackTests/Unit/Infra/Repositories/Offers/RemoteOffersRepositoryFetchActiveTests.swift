@@ -80,7 +80,7 @@ struct RemoteOffersRepositoryFetchActiveTests {
         let offerId1 = UUID().uuidString
         let offerId2 = UUID().uuidString
         let offerId3 = UUID().uuidString
-        
+
         let offers = [
             makeOfferResponse(id: offerId1, merchantName: "Starbucks"),
             makeOfferResponse(id: offerId2, merchantName: "Nike"),

@@ -4,7 +4,7 @@ extension RemoteOffersRepository {
     public func fetchActive(offset: Int, limit: Int) async -> FetchActiveOffersResult {
         let result: Result<PaginatedActiveOffersResponse, APIClientError> =
             await apiClient.request(apiRequest: OffersAPIRequest.listActive(
-                offset: offset, 
+                offset: offset,
                 limit: limit
             ))
 

@@ -21,7 +21,7 @@ public enum OffersAPIRequest: APIRequest {
         switch self {
         case let .listActive(offset, limit):
             [
-                "offset": String(offset), 
+                "offset": String(offset),
                 "limit": String(limit)
             ]
         }
