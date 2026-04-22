@@ -41,6 +41,9 @@ public enum <Feature>Error: Error, Equatable {
 
 // MARK: - Use Case
 // File: ClickNBack/Data/<Feature>/<Action>UseCase.swift
+//
+// RULE: one public `execute` method per use case — never add secondary getters
+// or convenience accessors; extract them as separate use cases.
 
 public final class <Action>UseCase {
     private let repository: <Feature>Repository
