@@ -82,6 +82,7 @@ ClickNBack/
 - **`async/await`** only — no Combine, no callbacks
 - **Value types** (`struct`) for models; **`final class`** for ViewModels and repositories
 - **Protocol-first**: define protocol in `Data/` or `Platform/`, implement in `Infra/`, consume the protocol
+- Use cases expose a **single public `execute` method** — never add convenience accessors or secondary getters to a use case class; extract them as separate use cases
 - Standard ViewModel state pattern:
   ```swift
   enum State { case idle, loading, success, error(SomeError) }
