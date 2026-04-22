@@ -2,30 +2,30 @@
 
 import Foundation
 
-enum AuthAPIRequest: APIRequest {
+public enum AuthAPIRequest: APIRequest {
     case login(email: String, password: String)
 
-    var method: HTTPMethod {
+    public var method: HTTPMethod {
         switch self {
         case .login: .POST
         }
     }
 
-    var endpoint: String {
+    public var endpoint: String {
         switch self {
         case .login: "v1/auth/login"
         }
     }
 
-    var headers: [String: String]? {
+    public var headers: [String: String]? {
         nil
     }
 
-    var queryParams: [String: String]? {
+    public var queryParams: [String: String]? {
         nil
     }
 
-    var body: [String: Any]? {
+    public var body: [String: Any]? {
         switch self {
         case let .login(email, password):
             [

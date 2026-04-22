@@ -41,7 +41,9 @@ ClickNBack/
 ├─ Features/<Feature>/          Screen + ViewModel + Subviews + Analytics event enum + L10n
 ├─ Infra/
 │   ├─ Platform/                Concrete impls: PublicAPIClient, UserDefaultsStorage, ConsoleLogger, …
-│   └─ Repositories/<Feature>/  RemoteXxxRepository + method extensions + APIRequest enum
+│   └─ Repositories/
+│       ├─ <Feature>/           RemoteXxxRepository + method extensions + APIRequest enum + DTOs
+│       └─ Shared/              Reusable DTOs (e.g. PaginationResponse) used by multiple repositories
 ├─ Platform/                    Cross-cutting protocols: APIClient, KeyValueStorage, Logger, AnalyticsTracker
 ├─ Main/
 │   ├─ AppConfig.swift          Environment enum + baseURL per environment
@@ -118,6 +120,8 @@ See the `write-tests` skill for full guidelines. Quick reference:
 - `@MainActor` on every test suite — one behavior per test
 - Public mocks in `ClickNBack/Support/Mocks/` — no private inline mocks
 - No `@testable import` — all types under test must be `public`
+- **Use realistic UUIDs** for model IDs — use `UUID().uuidString` in test helpers, not `"user-1"` or `"offer-id"` (avoids masking bugs)
+- **For list operations, test full mapping** — include ≥1 test with multiple items (3+) to verify all items are mapped, not just the first/last
 
 ---
 

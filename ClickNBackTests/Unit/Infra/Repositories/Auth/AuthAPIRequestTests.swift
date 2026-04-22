@@ -1,6 +1,4 @@
-//
-
-@testable import ClickNBack
+import ClickNBack
 import Testing
 
 @MainActor

@@ -15,6 +15,7 @@ paths:
 - `@Observable` on ViewModels — never `ObservableObject` / `@Published`
 - `struct` for models; `final class` for ViewModels, repositories, and use cases
 - Protocol defined in `Data/` or `Platform/`, implemented in `Infra/`, always consumed as the protocol type
+- **APIRequest enums** must be `public`, with all properties `public`
 - Standard ViewModel state pattern:
   ```swift
   enum State { case idle, loading, success, error(SomeError) }

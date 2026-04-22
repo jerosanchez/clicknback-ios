@@ -79,7 +79,8 @@ final class StartupFlowIntegrationTests {
 
     // MARK: - Helpers
 
-    /// Builds the full chain using real UserDefaultsStorage (no mocked storage layer).
+    // Builds the full chain using real UserDefaultsStorage (no mocked storage layer).
+    // swiftlint:disable:next large_tuple
     private func makeSUT() -> (task: CheckAuthStatusStartupTask, appState: AppState, storage: UserDefaultsStorage) {
         let suiteName = "com.clicknback.tests.startup.\(UUID().uuidString)"
         createdSuiteNames.append(suiteName)

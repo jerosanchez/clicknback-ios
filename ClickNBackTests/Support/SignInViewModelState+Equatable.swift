@@ -15,7 +15,7 @@ extension SignInViewModel.State: @retroactive Equatable {
     }
 }
 
-extension SignInViewModel.Error: @retroactive Equatable {
+extension SignInViewModel.Error {
     public nonisolated static func == (lhs: Self, rhs: Self) -> Bool {
         switch (lhs, rhs) {
         case (.badCredentials, .badCredentials),

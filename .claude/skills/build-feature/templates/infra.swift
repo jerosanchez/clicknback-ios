@@ -44,6 +44,16 @@ extension Remote<Feature>Repository {
         )
         return result
             .mapError { <Feature>Error(from: $0) }
-            .map { <Model>(from: $0) }
+            .map { $0.to<Model>() }
+    }
+}
+
+// MARK: - Mapper Extensions (private, in the same file)
+// Mapper methods are always private extensions on DTOs, never public methods on the response DTO itself.
+// This keeps the DTOs pure and the mapping logic close to where it's used.
+
+private extension <Response> {
+    func to<Model>() -> <Model> {
+        <Model>(/* map fields from self */)
     }
 }
