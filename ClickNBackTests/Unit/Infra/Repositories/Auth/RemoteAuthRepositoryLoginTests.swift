@@ -155,6 +155,10 @@ struct RemoteAuthRepositoryLoginTests {
 
     // MARK: - Helpers
 
+    private func makeSUT(apiClient: APIClient? = nil) -> RemoteAuthRepository {
+        RemoteAuthRepository(apiClient: apiClient ?? makeAPIClient())
+    }
+
     private func makeAPIClient(
         response: LoginSuccessResponse = LoginSuccessResponse(
             accessToken: "access-token",
@@ -166,9 +170,5 @@ struct RemoteAuthRepositoryLoginTests {
         let client = MockAPIClient()
         client.setMockResponse(response, for: endpoint)
         return client
-    }
-
-    private func makeSUT(apiClient: APIClient? = nil) -> RemoteAuthRepository {
-        RemoteAuthRepository(apiClient: apiClient ?? makeAPIClient())
     }
 }
