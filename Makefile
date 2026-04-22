@@ -150,12 +150,12 @@ test-integration: check-xcode
 		$(NO_SIGN)
 	@echo "$(COLOR_GREEN)✓ Integration tests completed$(COLOR_RESET)"
 
+# We do not runt UI tests to improve CI speed until we have proper UI tests in place
 test-all: check-xcode
 	@echo "$(COLOR_BLUE)Running all tests [$(SCHEME)] → $(SIM_DEVICE)...$(COLOR_RESET)"
 	xcodebuild test -scheme $(SCHEME) -configuration Debug \
 		-destination '$(SIM_DEST)' \
 		-only-testing ClickNBackTests \
-		-only-testing ClickNBackIntegrationTests \
 		-derivedDataPath build \
 		$(NO_SIGN)
 	@echo "$(COLOR_GREEN)✓ All tests completed$(COLOR_RESET)"
