@@ -9,8 +9,23 @@ struct CompositionRoot {
     static var apiClient: APIClient {
         PublicAPIClient(
             baseURL: AppConfig.baseURL,
-            session: URLSession.shared
+            session: URLSession.shared,
+            logger: logger
         )
+    }
+
+    static var authenticatedAPIClient: APIClient {
+        PrivateAPIClient(
+            inner: apiClient,
+            tokenStorage: secureStorage,
+            logger: logger
+        )
+    }
+
+    // MARK: - Repositories
+
+    static var offersRepository: OffersRepository {
+        RemoteOffersRepository(apiClient: authenticatedAPIClient)
     }
 
     // MARK: - Cross-cutting Concerns
