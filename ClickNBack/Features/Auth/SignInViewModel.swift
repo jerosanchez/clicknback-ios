@@ -11,6 +11,8 @@ class SignInViewModel {
     var loginUseCase: LoginUseCase
     var analyticsTracker: AnalyticsTracker
 
+    var onLoginSuccess: (() -> Void)?
+
     init(
         loginUseCase: LoginUseCase,
         analyticsTracker: AnalyticsTracker
@@ -19,7 +21,7 @@ class SignInViewModel {
         self.analyticsTracker = analyticsTracker
     }
 
-    enum Error {
+    enum Error: Equatable {
         case badCredentials
         case serverError
         case timeout
@@ -28,7 +30,7 @@ class SignInViewModel {
 
     // MARK: State
 
-    enum State {
+    enum State: Equatable {
         case idle
         case loading
         case success
@@ -62,6 +64,10 @@ class SignInViewModel {
         state = loginResult.toState()
 
         trackLoginResultIfNeeded(for: credentials)
+
+        if case .success = state {
+            onLoginSuccess?()
+        }
     }
 
     // MARK: - Helpers
