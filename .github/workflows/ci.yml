@@ -21,6 +21,14 @@ jobs:
         with:
           xcode-version: "26.3.0"
 
+      - name: List available simulators
+        run: |
+          echo "=== Available iOS Simulators ==="
+          xcrun simctl list devices iPhone | grep -E '^\s+\(' || echo "No iPhone simulators found"
+          echo ""
+          echo "=== All Simulators ==="
+          xcrun simctl list devices
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
