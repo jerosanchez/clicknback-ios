@@ -110,7 +110,13 @@ SIM_DEVICE ?= iPhone 17
 SCHEME := $(shell xcodebuild -list -project ClickNBack.xcodeproj 2>/dev/null | grep -qw "ClickNBack-Dev" && echo "ClickNBack-Dev" || echo "ClickNBack")
 
 # Simulator destination string
-SIM_DEST := platform=iOS Simulator,name=$(SIM_DEVICE)
+# In CI (when CI env var is set), use generic platform to work across different Xcode versions
+# In local dev, use specific device name for predictability
+ifeq ($(CI),true)
+	SIM_DEST := generic/platform=iOS Simulator
+else
+	SIM_DEST := platform=iOS Simulator,name=$(SIM_DEVICE)
+endif
 
 # Bypass code signing for simulator builds (no development team required)
 NO_SIGN := CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO

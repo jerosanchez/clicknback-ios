@@ -9,6 +9,8 @@ on:
 jobs:
   qa-gates:
     runs-on: macos-latest
+    env:
+      CI: true
     
     steps:
       - name: Checkout code
