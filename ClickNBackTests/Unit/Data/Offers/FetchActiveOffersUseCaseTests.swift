@@ -28,7 +28,7 @@ struct FetchActiveOffersUseCaseTests {
 
         // Assert
         let cached = try? cache.get([Offer].self, forKey: OffersCacheKey.activeOffersFirstPage.rawValue)
-        #expect(cached == [.mock])
+        #expect(cached == .mock)
     }
 
     @Test
