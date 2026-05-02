@@ -26,6 +26,7 @@ Every issue must include a **Proposed PR Split** section. Group changes so that:
 - Additive-only changes (new protocols, use cases, models) ship first — they have zero risk
 - New UI that is not yet reachable ships before the wiring that exposes it
 - The PR that changes user-visible behaviour ships last
-- Aim for 2–3 PRs; avoid splitting so finely that each PR is trivial
+- **For simple fixes**: if the fix is a single, cohesive change (bug fix with tests, small feature with limited scope), use **1 PR**
+- **For larger work**: aim for 2–3 PRs; avoid splitting so finely that each PR is trivial
 
 Label each PR with a one-line note explaining why it is safe to merge independently.
