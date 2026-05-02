@@ -109,6 +109,38 @@ struct SignInViewModelTests {
         #expect(sut.state == .error(.serverError))
     }
 
+    @Test
+    func signInTapped_callsOnLoginSuccess_onValidCredentials() async {
+        // Arrange
+        var called = false
+        let sut = makeSUT()
+        sut.email = "user@example.com"
+        sut.password = "secret"
+        sut.onLoginSuccess = { called = true }
+
+        // Act
+        await sut.signInTapped()
+
+        // Assert
+        #expect(called)
+    }
+
+    @Test
+    func signInTapped_doesNotCallOnLoginSuccess_onBadCredentials() async {
+        // Arrange
+        var called = false
+        let repository = MockAuthRepository()
+        repository.loginHandler = { _ in .failure(.badCredentials) }
+        let sut = makeSUT(authRepository: repository)
+        sut.onLoginSuccess = { called = true }
+
+        // Act
+        await sut.signInTapped()
+
+        // Assert
+        #expect(!called)
+    }
+
     // MARK: - signInTapped – isLoading convenience property
 
     @Test
