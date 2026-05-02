@@ -1,11 +1,11 @@
 import Foundation
 
-public enum CashbackType: String, Codable, Equatable {
+public enum CashbackType: String, Codable {
     case percent
     case fixed
 }
 
-public struct Offer: Codable, Equatable {
+public struct Offer: Codable {
     public let id: String
     public let merchantName: String
     public let cashbackType: CashbackType
@@ -30,5 +30,23 @@ public struct Offer: Codable, Equatable {
         self.monthlyCap = monthlyCap
         self.startDate = startDate
         self.endDate = endDate
+    }
+}
+
+extension CashbackType: Equatable {
+    public nonisolated static func == (lhs: CashbackType, rhs: CashbackType) -> Bool {
+        lhs.rawValue == rhs.rawValue
+    }
+}
+
+extension Offer: Equatable {
+    public nonisolated static func == (lhs: Offer, rhs: Offer) -> Bool {
+        lhs.id == rhs.id &&
+        lhs.merchantName == rhs.merchantName &&
+        lhs.cashbackType == rhs.cashbackType &&
+        lhs.cashbackValue == rhs.cashbackValue &&
+        lhs.monthlyCap == rhs.monthlyCap &&
+        lhs.startDate == rhs.startDate &&
+        lhs.endDate == rhs.endDate
     }
 }
