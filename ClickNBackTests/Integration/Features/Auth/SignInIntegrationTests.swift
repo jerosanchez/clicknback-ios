@@ -136,7 +136,7 @@ struct SignInIntegrationTests {
         config.protocolClasses = [MockURLProtocol.self]
         let session = URLSession(configuration: config)
 
-        let apiClient = PublicAPIClient(baseURL: baseURL, session: session)
+        let apiClient = PublicAPIClient(baseURL: baseURL, session: session, logger: MockLogger())
         let authRepository = RemoteAuthRepository(apiClient: apiClient)
         let tokenStorage = MockKeyValueStorage()
         let loginUseCase = LoginUseCase(authRepository: authRepository, tokenStorage: tokenStorage)

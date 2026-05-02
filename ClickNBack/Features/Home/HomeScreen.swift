@@ -7,7 +7,7 @@ struct HomeScreen: View {
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            OffersScreen()
+            OffersContainer()
                 .tabItem {
                     Label("Offers", systemImage: "tag.fill")
                 }

@@ -307,7 +307,7 @@ struct PublicAPIClientTests {
         let config = URLSessionConfiguration.ephemeral
         config.protocolClasses = [MockURLProtocol.self]
         let session = URLSession(configuration: config)
-        return PublicAPIClient(baseURL: baseURL ?? self.baseURL, session: session)
+        return PublicAPIClient(baseURL: baseURL ?? self.baseURL, session: session, logger: MockLogger())
     }
 }
 

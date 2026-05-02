@@ -9,6 +9,9 @@ public final class MockAPIClient: APIClient {
     public var requestHistory: [(endpoint: String, method: String)] = []
     public var mockResponses: [String: Any] = [:]
     public var mockError: APIClientError?
+    /// Sequential error queue. Each call dequeues one entry. `nil` means fall through to the
+    /// success path (mockResponses); a non-nil value returns that error for that call.
+    public var errorQueue: [APIClientError?] = []
 
     public init() {}
 
@@ -17,7 +20,11 @@ public final class MockAPIClient: APIClient {
     public func request<T: Decodable>(apiRequest: APIRequest) async -> Result<T, APIClientError> {
         requestHistory.append((endpoint: apiRequest.endpoint, method: String(describing: apiRequest.method)))
 
-        if let error = mockError {
+        if !errorQueue.isEmpty {
+            let queued = errorQueue.removeFirst()
+            if let error = queued { return .failure(error) }
+            // nil → fall through to success path
+        } else if let error = mockError {
             return .failure(error)
         }
 
@@ -46,5 +53,6 @@ public final class MockAPIClient: APIClient {
         mockResponses.removeAll()
         mockError = nil
         requestHistory.removeAll()
+        errorQueue.removeAll()
     }
 }

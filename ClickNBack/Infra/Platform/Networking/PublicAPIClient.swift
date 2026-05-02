@@ -5,13 +5,16 @@ import Foundation
 public final class PublicAPIClient: APIClient {
     private let baseURL: URL
     private let session: URLSession
+    private let logger: Logger
 
     public init(
         baseURL: URL,
         session: URLSession,
+        logger: Logger
     ) {
         self.baseURL = baseURL
         self.session = session
+        self.logger = logger
     }
 
     public func request<T: Decodable>(apiRequest: APIRequest) async -> Result<T, APIClientError> {
@@ -19,6 +22,7 @@ public final class PublicAPIClient: APIClient {
             url: baseURL.appendingPathComponent(apiRequest.endpoint),
             resolvingAgainstBaseURL: false
         ) else {
+            logger.error("[\(apiRequest.method.rawValue)] \(apiRequest.endpoint) — invalid URL")
             return .failure(.invalidURL)
         }
 
@@ -29,10 +33,13 @@ public final class PublicAPIClient: APIClient {
         }
 
         guard let url = components.url else {
+            logger.error("[\(apiRequest.method.rawValue)] \(apiRequest.endpoint) — could not build URL from components")
             return .failure(.invalidURL)
         }
 
         let request = buildURLRequest(url: url, apiRequest: apiRequest)
+
+        logger.debug("→ [\(apiRequest.method.rawValue)] \(url.absoluteString)")
 
         let data: Data
         let response: URLResponse
@@ -40,18 +47,23 @@ public final class PublicAPIClient: APIClient {
         do {
             (data, response) = try await session.data(for: request)
         } catch let urlError as URLError {
+            logger.error("← [\(apiRequest.method.rawValue)] \(url.absoluteString) — URLError: \(urlError.localizedDescription)")
             return handleURLError(urlError)
         } catch {
+            logger.error("← [\(apiRequest.method.rawValue)] \(url.absoluteString) — unknown error: \(error)")
             return .failure(.unknownError(error))
         }
 
         guard let httpResponse = response as? HTTPURLResponse else {
+            logger.error("← [\(apiRequest.method.rawValue)] \(url.absoluteString) — non-HTTP response")
             let userInfo = [NSLocalizedDescriptionKey: "Invalid response"]
             let error = NSError(domain: "Networking", code: 666, userInfo: userInfo)
             return .failure(.unknownError(error))
         }
 
         let statusCode = httpResponse.statusCode
+
+        logger.debug("← [\(apiRequest.method.rawValue)] \(url.absoluteString) — HTTP \(statusCode)")
 
         return handleResponse(data, statusCode: statusCode)
     }
@@ -86,6 +98,7 @@ public final class PublicAPIClient: APIClient {
         switch statusCode {
         case 200 ... 299:
             guard let dto = try? JSONDecoder().decode(T.self, from: data) else {
+                logger.error("Decoding failed for HTTP \(statusCode) response (\(data.count) bytes)")
                 return .failure(.decodingError)
             }
             return .success(dto)

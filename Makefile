@@ -109,8 +109,11 @@ SIM_DEVICE ?= iPhone 17
 # Auto-detect scheme: prefer ClickNBack-Dev (Tuist-generated), fall back to ClickNBack (original xcodeproj)
 SCHEME := $(shell xcodebuild -list -project ClickNBack.xcodeproj 2>/dev/null | grep -qw "ClickNBack-Dev" && echo "ClickNBack-Dev" || echo "ClickNBack")
 
-# Simulator destination string
-SIM_DEST := platform=iOS Simulator,name=$(SIM_DEVICE)
+ifeq ($(CI),true)
+	SIM_DEST := platform=iOS Simulator,name=iPhone 17
+else
+	SIM_DEST := platform=iOS Simulator,name=$(SIM_DEVICE)
+endif
 
 # Bypass code signing for simulator builds (no development team required)
 NO_SIGN := CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
