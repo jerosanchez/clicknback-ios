@@ -25,6 +25,16 @@ public enum AppIcons {
         static var warning = "exclamationmark.circle.fill"
         static var error = "xmark.circle.fill"
     }
+
+    // MARK: - Error State Icons
+
+    enum ErrorState {
+        static var unauthorized = "lock.slash.fill"
+        static var serverError = "exclamationmark.triangle.fill"
+        static var requestTimeout = "clock.badge.xmark.fill"
+        static var noConnectivity = "wifi.slash"
+        static var unexpectedError = "questionmark.circle.fill"
+    }
 }
 
 // MARK: - Icon builders

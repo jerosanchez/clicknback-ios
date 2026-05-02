@@ -41,10 +41,9 @@ public enum AppDimensions {
 
     // MARK: - Button Dimensions
 
-    enum ButtonHeight {
-        static let compact: CGFloat = 40
-        static let minimum: CGFloat = 44
-        static let medium: CGFloat = 48
+    enum Button {
+        static let height: CGFloat = 48
+        static let cornerRadius: CGFloat = CornerRadius.medium
     }
 
     // MARK: - Text Field Dimensions
