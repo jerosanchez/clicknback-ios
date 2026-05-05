@@ -125,7 +125,14 @@ MIN_COVERAGE ?= 65
 # CODE QUALITY
 # ============================================================================
 
-.PHONY: build test test-integration test-all coverage format lint
+.PHONY: build boot-sim test test-integration test-all coverage format lint
+
+# Boots the simulator before running tests to avoid "preflight checks" failures
+# when the simulator is left in a mid-shutdown state. Skipped on CI.
+boot-sim:
+ifneq ($(CI),true)
+	@xcrun simctl boot "$(SIM_DEVICE)" 2>/dev/null || true
+endif
 
 build: check-xcode
 	@echo "$(COLOR_BLUE)Building ClickNBack [$(SCHEME)] → $(SIM_DEVICE)...$(COLOR_RESET)"
@@ -135,7 +142,7 @@ build: check-xcode
 		$(NO_SIGN)
 	@echo "$(COLOR_GREEN)✓ Build succeeded$(COLOR_RESET)"
 
-test: check-xcode
+test: check-xcode boot-sim
 	@echo "$(COLOR_BLUE)Running unit tests [$(SCHEME)] → $(SIM_DEVICE)...$(COLOR_RESET)"
 	xcodebuild test -scheme $(SCHEME) -configuration Debug \
 		-destination '$(SIM_DEST)' \
@@ -144,7 +151,7 @@ test: check-xcode
 		$(NO_SIGN)
 	@echo "$(COLOR_GREEN)✓ Unit tests completed$(COLOR_RESET)"
 
-test-integration: check-xcode
+test-integration: check-xcode boot-sim
 	@echo "$(COLOR_BLUE)Running integration tests [$(SCHEME)] → $(SIM_DEVICE)...$(COLOR_RESET)"
 	xcodebuild test -scheme $(SCHEME) -configuration Debug \
 		-destination '$(SIM_DEST)' \
@@ -154,7 +161,7 @@ test-integration: check-xcode
 	@echo "$(COLOR_GREEN)✓ Integration tests completed$(COLOR_RESET)"
 
 # We do not runt UI tests to improve CI speed until we have proper UI tests in place
-test-all: check-xcode
+test-all: check-xcode boot-sim
 	@echo "$(COLOR_BLUE)Running all tests [$(SCHEME)] → $(SIM_DEVICE)...$(COLOR_RESET)"
 	xcodebuild test -scheme $(SCHEME) -configuration Debug \
 		-destination '$(SIM_DEST)' \
