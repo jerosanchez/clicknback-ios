@@ -8,7 +8,8 @@ on:
 
 jobs:
   qa-gates:
-    runs-on: macos-latest
+    # runs-on: macos-latest
+    runs-on: [self-hosted]
     env:
       CI: true
     
