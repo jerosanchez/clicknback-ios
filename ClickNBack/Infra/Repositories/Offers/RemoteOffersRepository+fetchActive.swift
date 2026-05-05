@@ -36,7 +36,7 @@ private extension PaginatedActiveOffersResponse {
     func toOffersPage() -> OffersPage {
         OffersPage(
             offers: data.map { $0.toOffer() },
-            pagination: OffersPagination(
+            pagination: Pagination(
                 offset: pagination.offset,
                 limit: pagination.limit,
                 total: pagination.total
