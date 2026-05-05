@@ -10,8 +10,6 @@ extension PreviewContainer {
         let offersRepository = MockOffersRepository()
         offersRepository.fetchActiveHandler = fetchActiveHandler
 
-        let cache = MockKeyValueStorage()
-
         return HomeScreen()
             .environment(\.locale, appLanguage.locale)
     }
