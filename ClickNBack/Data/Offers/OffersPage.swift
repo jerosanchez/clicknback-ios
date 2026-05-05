@@ -1,8 +1,8 @@
 public struct OffersPage: Equatable {
     public let offers: [Offer]
-    public let pagination: OffersPagination
+    public let pagination: Pagination
 
-    public init(offers: [Offer], pagination: OffersPagination) {
+    public init(offers: [Offer], pagination: Pagination) {
         self.offers = offers
         self.pagination = pagination
     }

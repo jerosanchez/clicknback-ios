@@ -240,7 +240,7 @@ struct OffersViewModelTests {
         repository.fetchActiveHandler = { _, _ in
             .success(OffersPage(
                 offers: nextOffers,
-                pagination: OffersPagination(offset: 20, limit: 20, total: 35)
+                pagination: Pagination(offset: 20, limit: 20, total: 35)
             ))
         }
 
@@ -266,7 +266,7 @@ struct OffersViewModelTests {
         repository.fetchActiveHandler = { _, _ in
             .success(OffersPage(
                 offers: nextOffers,
-                pagination: OffersPagination(offset: 20, limit: 20, total: 60)
+                pagination: Pagination(offset: 20, limit: 20, total: 60)
             ))
         }
 
@@ -527,7 +527,7 @@ private extension OffersViewModelTests {
     func makeOffersPage(offers: [Offer], total: Int) -> OffersPage {
         OffersPage(
             offers: offers,
-            pagination: OffersPagination(offset: 0, limit: 20, total: total)
+            pagination: Pagination(offset: 0, limit: 20, total: total)
         )
     }
 }
