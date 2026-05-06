@@ -217,3 +217,29 @@ regenerate: check-tuist clean-artifacts
 
 clean-all: clean-artifacts clean-cache regenerate
 	@echo "$(COLOR_GREEN)✓ Full cleanup complete$(COLOR_RESET)"
+
+# ============================================================================
+# CI RUNNER
+# ============================================================================
+
+# Path to the self-hosted GitHub Actions runner. Override with:
+#   make runner-start RUNNER_DIR=/path/to/actions-runner
+RUNNER_DIR ?= $(HOME)/actions-runner
+
+.PHONY: runner-start runner-stop runner-status runner-log
+
+runner-start:
+	@echo "$(COLOR_BLUE)Starting self-hosted runner...$(COLOR_RESET)"
+	@cd $(RUNNER_DIR) && ./svc.sh start
+	@echo "$(COLOR_GREEN)✓ Runner started$(COLOR_RESET)"
+
+runner-stop:
+	@echo "$(COLOR_BLUE)Stopping self-hosted runner...$(COLOR_RESET)"
+	@cd $(RUNNER_DIR) && ./svc.sh stop
+	@echo "$(COLOR_GREEN)✓ Runner stopped$(COLOR_RESET)"
+
+runner-status:
+	@cd $(RUNNER_DIR) && ./svc.sh status
+
+runner-log:
+	@tail -f $(RUNNER_DIR)/_diag/Runner_*.log
