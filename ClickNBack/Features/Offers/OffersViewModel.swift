@@ -44,8 +44,8 @@ final class OffersViewModel {
 
     var visibleOffers: [Offer]? {
         switch state {
-        case .loaded(let offers, _), 
-            .loadingMore(let offers), 
+        case .loaded(let offers, _),
+            .loadingMore(let offers),
             .refreshing(let offers):
             return offers
         default:
@@ -126,7 +126,7 @@ final class OffersViewModel {
     private func initialLoad() async {
         isInitialLoadInProgress = true
         defer { isInitialLoadInProgress = false }
-        
+
         if let cached = getCachedOffersUseCase.execute() {
             state = .loaded(cached, hasMore: true)
             let result = await fetchOffersUseCase.execute(offset: 0, limit: pageLimit)

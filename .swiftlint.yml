@@ -1,2 +1,59 @@
+# SwiftLint Configuration for ClickNBack iOS
+
+# ============================================================================
+# DISABLED RULES
+# ============================================================================
 disabled_rules:
+  # TODO items are acceptable during active development
   - todo
+
+# ============================================================================
+# CONFIGURED RULES - Explicit Exceptions
+# ============================================================================
+
+# Test files often need to be comprehensive with many test cases
+# This exceeds the default 400-line limit but is acceptable for test suites
+file_length:
+  warning: 600
+  error: 1000
+
+# Test struct bodies (with many @Test methods) can exceed 250 lines
+# This is acceptable for comprehensive test coverage
+type_body_length:
+  warning: 350
+  error: 500
+
+# Test assertions and some API client logging lines exceed 120 chars
+# Shorter lines would reduce readability of test assertions
+line_length:
+  warning: 130
+  error: 150
+
+# Test suite names are intentionally descriptive (e.g., RemotePurchasesRepositoryFetchUserPurchasesTests)
+# Clear names improve discoverability and test failure messages
+type_name:
+  min_length: 1
+  max_length: 50
+
+# identifier_name: Short variable names in pattern matching are a Swift convention
+# Examples: lo=left.offers, ro=right.offers, lp=left.purchases, le=left.error
+# These are disabled explicitly in files where they are used (Equatable extensions)
+identifier_name:
+  min_length: 2
+  excluded:
+    - l  # Loop counters and pattern matching
+    - i
+    - j
+    - k
+    - x
+    - y
+    - z
+
+# ============================================================================
+# OPTIONAL RULES (not enforced by default in strict mode)
+# ============================================================================
+
+# Trailing comma is a style choice; we allow it
+trailing_comma:
+  severity: warning
+

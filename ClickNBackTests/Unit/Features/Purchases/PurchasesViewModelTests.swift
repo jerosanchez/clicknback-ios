@@ -437,7 +437,7 @@ private extension PurchasesViewModelTests {
             analyticsTracker: analyticsTracker
         )
     }
-    
+
     func makePurchases(count: Int, startIndex: Int = 0) -> [Purchase] {
         (startIndex..<(startIndex + count)).map { index in
             Purchase(

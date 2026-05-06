@@ -120,7 +120,7 @@ final class PurchasesViewModel {
 
     private func initialLoad() async {
         let result = await fetchPurchasesUseCase.execute(offset: 0, limit: pageLimit)
-        
+
         switch result {
         case .success(let page):
             if page.purchases.isEmpty {
