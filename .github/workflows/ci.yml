@@ -8,7 +8,8 @@ on:
 
 jobs:
   qa-gates:
-    runs-on: macos-latest
+    # runs-on: macos-latest
+    runs-on: [self-hosted]
     env:
       CI: true
     
@@ -19,7 +20,7 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: "26.3.0"
+          xcode-version: "26.4.1"
 
       - name: List available simulators
         run: |
@@ -29,10 +30,10 @@ jobs:
           echo "=== All Simulators ==="
           xcrun simctl list devices
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+      # - name: Setup Python
+      #   uses: actions/setup-python@v5
+      #   with:
+      #     python-version: "3.12"
 
       - name: Install dev tools
         run: |
