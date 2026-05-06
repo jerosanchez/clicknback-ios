@@ -179,6 +179,9 @@ See the `write-tests` skill for full guidelines. Quick reference:
 |---|---|
 | `write-tests` | Write tests following project conventions |
 | `build-feature` | Scaffold a complete new feature end-to-end |
+| `build-data-layer` | Scaffold the data layer (domain models, repository protocol, use case, error type, mock, preview data, unit tests) |
+| `build-infra-layer` | Scaffold the infrastructure layer (API request enum, DTOs, remote repository, operation extensions, unit tests) |
+| `build-ui-layer` | Scaffold the UI layer (ViewModel, Screen, subviews, analytics, localization, composition wiring, preview helpers, unit tests) |
 | `analyze-bug` | Trace and debug a reported issue |
 | `analyze-performance` | Profile and improve performance |
 | `write-docs` | Generate DocC documentation |
