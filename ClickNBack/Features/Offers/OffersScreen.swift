@@ -59,7 +59,7 @@ struct OffersScreen: View {
 
     private func offersEmptyStateView() -> some View {
         EmptyStateView(
-            imageSystemName: "tag.slash",
+            imageSystemName: "tag",
             title: String(localized: L10nKey.Offers.EmptyState.title),
             message: String(localized: L10nKey.Offers.EmptyState.message)
         )
@@ -69,7 +69,7 @@ struct OffersScreen: View {
         ScrollView {
             LazyVStack(spacing: AppSpacing.compact) {
                 ForEach(offers, id: \.id) { offer in
-                    OfferCardView(offer: offer)
+                    OfferRowView(offer: offer)
                         .contentShape(Rectangle())
                         .onTapGesture {}
                 }
@@ -94,6 +94,14 @@ struct OffersScreen: View {
     }
 }
 
-#Preview {
+#Preview("Success") {
     PreviewContainer.offersScreen()
+}
+
+#Preview("Empty") {
+    PreviewContainer.offersScreenEmpty()
+}
+
+#Preview("No Connectivity") {
+    PreviewContainer.offersScreenNoConnectivity()
 }
