@@ -7,20 +7,24 @@
 [![Swift](https://img.shields.io/badge/Swift-6.0%2B-orange?logo=swift)](https://swift.org)
 [![iOS](https://img.shields.io/badge/iOS-26.0%2B-lightgrey?logo=apple)](https://developer.apple.com/ios/)
 
-This is the native iOS client for **ClickNBack** — a production-grade cashback platform built from the ground up with zero shortcuts. Users earn rewards on purchases at partner merchants; this app lets them authenticate, browse active offers, track their purchase history, and monitor their wallet balance. It is **not a standalone demo** — it talks to a real, continuously deployed backend ([clicknback.com](https://clicknback.com/docs)) over HTTPS with JWT authentication, the same API a production app would consume. Every architectural decision, from strict layer isolation to concurrency safety, was made to match the standards expected at a company shipping a financial product to real users.
+This is the native iOS client for **ClickNBack** — a production-grade cashback platform built from the ground up with zero shortcuts. Users earn rewards on purchases at partner merchants; this app lets them authenticate, browse active offers, track their purchase history, and monitor their wallet balance.
+
+It is **not a standalone demo** — it talks to a real, continuously deployed backend ([clicknback.com](https://clicknback.com/docs)) over HTTPS with JWT authentication, the same API a production app would consume. Every architectural decision, from strict layer isolation to concurrency safety, was made to match the standards expected at a company shipping a financial product to real users.
 
 ---
 
 ## The Platform
 
-ClickNBack models how a real cashback product works: the platform ingests purchase events, verifies them asynchronously (simulating bank reconciliation), calculates cashback, manages user wallets with pending and available balances, and processes withdrawals. The backend is live, continuously deployed, and open for technical review.
+ClickNBack models how a real cashback product works: the platform ingests purchase events, verifies them asynchronously (simulating bank reconciliation), calculates cashback, manages user wallets with pending and available balances, and processes withdrawals.
+
+The backend is live, continuously deployed, and open for technical review.
 
 | | |
 | --- | --- |
 | **Backend repo** | [github.com/jerosanchez/clicknback](https://github.com/jerosanchez/clicknback) |
 | **Live API docs** | [clicknback.com/docs](https://clicknback.com/docs) |
 | **Stack** | FastAPI · PostgreSQL · JWT · Python 3.13 |
-| **CI gate** | Lint + tests (85 % coverage hard gate) + security scanning on every commit |
+| **Full CI gates** | Lint + tests (85 % coverage hard gate) + security scanning on every commit |
 
 The iOS app is the mobile face of that platform. It connects to the same production API that a real merchant cashback app would use.
 
@@ -28,32 +32,41 @@ The iOS app is the mobile face of that platform. It connects to the same product
 
 ## App Features
 
-| Screen | Description |
-| --- | --- |
-| **Splash** | App entry point — resolves authentication state and routes accordingly |
-| **Onboarding** | First-run flow introducing the app's value proposition and guiding account creation |
-| **Sign In** | JWT-based authentication against the live ClickNBack API |
-| **Home** | Authenticated landing screen — navigation hub for the main sections |
-| **Offers** | Browse active cashback offers from partner merchants; register a purchase against an offer to earn cashback (purchase ingestion) |
-| **Purchases** | View purchase history and cashback status per transaction |
-| **Wallet** | Real-time wallet summary — pending, available, and paid-out balances; request a simulated payout (withdrawal) |
-| **Profile** | User profile and account management |
+| Screen | Description | Status |
+| --- | --- | --- |
+| **Splash** | App entry point — resolves authentication state and routes accordingly | 🟢 |
+| **Onboarding** | First-run flow introducing the app's value proposition and guiding account creation | 🔴 |
+| **Sign In** | JWT-based authentication against the live ClickNBack API | 🟢 |
+| **Home** | Authenticated landing screen — navigation hub for the main sections | 🟢 |
+| **Offers** | Browse active cashback offers from partner merchants; register a purchase against an offer to earn cashback (purchase ingestion) | 🟡 |
+| **Purchases** | View purchase history and cashback status per transaction | 🟡 |
+| **Wallet** | Real-time wallet summary — pending, available, and paid-out balances; request a simulated payout (withdrawal) | 🔴 |
+| **Profile** | User profile and account management | 🔴 |
+
+**Status Legend:**
+
+- 🟢 Finished
+- 🟡 Ongoing development
+- 🔴 Scheduled / Backlog
 
 ---
 
 ## Architecture
 
-The app follows **Clean Architecture + MVVM** with a strict inward dependency rule — no layer imports types from an outer layer. `Main/Composition/` is the single place where layers are wired together via constructor injection.
+The app follows simple **Clean Architecture + MVVM** approach with a strict inward dependency rule — no layer imports types from an outer layer. `Main/Composition/` is the single place where layers are wired together via constructor injection.
 
 ```mermaid
 graph TD
-    MC["Main<br/>- Composition"]
-    UI["Features / UI"]
-    DL["Data / Domain"]
-    IL["Infrastructure"]
-    PL["Platform"]
-    DS["Core<br/>- Design System<br/>- Domain"]
-    BE["ClickNBack Backend<br/>(live API)"]
+    subgraph App["ClickNBack iOS App"]
+        MC["Main"]
+        UI["Features<br/>(UI)"]
+        DL["Data"]
+        IL["Infrastructure"]
+        PL["Platform"]
+        DS["Core<br/>- Design System<br/>- Domain"]
+    end
+    
+    BE["Backend<br/>(live API)"]
 
     MC --> UI
     MC --> IL
@@ -72,11 +85,11 @@ graph TD
 | Layer | Location | Responsibility |
 | --- | --- | --- |
 | **Features / UI** | `ClickNBack/Features/` | SwiftUI views + ViewModels; no business logic |
-| **Data / Domain** | `ClickNBack/Data/` | Use cases, repository protocols, business models, typed errors |
+| **Data** | `ClickNBack/Data/` | Use cases, repository protocols, business models, typed errors |
 | **Infrastructure** | `ClickNBack/Infra/` | Remote repository implementations, API clients, storage adapters |
 | **Platform** | `ClickNBack/Platform/` | Cross-cutting protocols only — AnalyticsTracker, Logger, API Client, KeyValueStorage, FeatureFlagEvaluator etc. |
-| **Core / Design System** | `ClickNBack/Core/` | System Design tokens, domain (primitive) models |
-| **Main / Composition** | `ClickNBack/Main/` | The only place layers meet - Composition Root, app startup |
+| **Core** | `ClickNBack/Core/` | System Design tokens, domain (primitive) models |
+| **Main** | `ClickNBack/Main/` | The only place layers meet - Composition Root, app startup |
 
 ---
 
@@ -89,7 +102,7 @@ graph TD
 | **Concurrency** | `async/await` only — no Combine, no callbacks |
 | **Actor isolation** | `@MainActor` applied globally (`SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor`) |
 | **State management** | `@Observable` (Swift Observation framework) — no `ObservableObject` |
-| **Networking** | `URLSession`-based `PublicAPIClient` behind the `APIClient` protocol |
+| **Networking** | `URLSession`-based API client, with token auto-refresh for private endpoints |
 | **Project management** | [Tuist](https://tuist.dev) — declarative `Project.swift` generates the Xcode project; configuration as code ensures consistency across environments; never edit `project.pbxproj` by hand |
 | **Testing** | Swift Testing (`import Testing`, `#expect`, `@Suite`, `@Test`) — never XCTest |
 | **Linting / formatting** | SwiftLint · SwiftFormat |

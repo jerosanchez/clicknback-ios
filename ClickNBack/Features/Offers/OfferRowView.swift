@@ -2,7 +2,7 @@
 
 import SwiftUI
 
-struct OfferCardView: View {
+struct OfferRowView: View {
     let offer: Offer
 
     var body: some View {
@@ -53,7 +53,7 @@ struct OfferCardView: View {
             .fill(AppColors.Background.tertiary)
             .frame(width: 64, height: 64)
             .overlay(
-                Image(systemName: "photo")
+                Image(systemName: "tag")
                     .foregroundStyle(AppColors.Text.disabled)
             )
     }
@@ -92,6 +92,5 @@ struct OfferCardView: View {
 }
 
 #Preview {
-    OfferCardView(offer: .mock)
-        .padding(AppSpacing.medium)
+    PreviewContainer.offerRowView()
 }

@@ -34,18 +34,19 @@ Then select the **`ClickNBack-Dev`** scheme, choose a simulator, and press **Run
 
 ## AI Skills
 
-This project is AI-assisted. All skills live in `.claude/skills/` and are invoked with `/project:<skill>`:
+This project is AI-assisted. All skills live in `.claude/skills/` and are invoked with `/<skill>`:
 
 | Skill | When to use |
 | --- | --- |
-| `/project:build-data-layer` | Scaffold use cases, repository protocols, domain models, mocks, and tests for a new feature |
-| `/project:build-infra-layer` | Scaffold API request enum, DTOs, remote repository, and infra tests |
-| `/project:write-tests` | Generate Swift Testing suites following AAA structure and project conventions |
-| `/project:analyze-bug` | Trace, debug, and fix a reported issue |
-| `/project:analyze-performance` | Profile and improve performance |
-| `/project:write-docs` | Generate DocC documentation for protocols, use cases, or ViewModels |
-| `/project:create-issue` | Scaffold a well-formed GitHub issue from a description |
-| `/project:review-pr` | Run a structured code review against the current branch diff |
+| `/build-data-layer` | Scaffold use cases, repository protocols, domain models, mocks, and tests for a new feature |
+| `/build-infra-layer` | Scaffold API request enum, DTOs, remote repository, and infra tests |
+| `/build-ui-layer` | Scaffold ViewModel, Screen, subviews, analytics, localization, composition wiring, preview helpers, and tests |
+| `/write-tests` | Generate Swift Testing suites following AAA structure and project conventions |
+| `/analyze-bug` | Trace, debug, and fix a reported issue |
+| `/analyze-performance` | Profile and improve performance |
+| `/write-docs` | Generate DocC documentation for protocols, use cases, or ViewModels |
+| `/create-issue` | Scaffold a well-formed GitHub issue from a description |
+| `/review-pr` | Run a structured code review against the current branch diff |
 
 For architecture, naming conventions, Swift patterns, and testing standards, the AI loads `.claude/CLAUDE.md` automatically — no need to repeat them here.
 

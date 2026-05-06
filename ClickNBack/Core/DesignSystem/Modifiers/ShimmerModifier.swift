@@ -18,7 +18,7 @@ public struct ShimmerModifier: ViewModifier {
                 .init(color: Color.white.opacity(0.15), location: 0.3),
                 .init(color: Color.white.opacity(0.3), location: 0.5),
                 .init(color: Color.white.opacity(0.15), location: 0.7),
-                .init(color: .clear, location: 1.0),
+                .init(color: .clear, location: 1.0)
             ]),
             startPoint: .topLeading,
             endPoint: .bottomTrailing

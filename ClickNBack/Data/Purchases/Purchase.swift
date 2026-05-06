@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Purchase: Equatable {
+public struct Purchase {
     public let id: String
     public let merchantName: String
     public let amount: Decimal
@@ -25,5 +25,17 @@ public struct Purchase: Equatable {
         self.cashbackAmount = cashbackAmount
         self.cashbackStatus = cashbackStatus
         self.createdAt = createdAt
+    }
+}
+
+extension Purchase: Equatable {
+    public nonisolated static func == (lhs: Purchase, rhs: Purchase) -> Bool {
+        lhs.id == rhs.id &&
+        lhs.merchantName == rhs.merchantName &&
+        lhs.amount == rhs.amount &&
+        lhs.status == rhs.status &&
+        lhs.cashbackAmount == rhs.cashbackAmount &&
+        lhs.cashbackStatus == rhs.cashbackStatus &&
+        lhs.createdAt == rhs.createdAt
     }
 }
