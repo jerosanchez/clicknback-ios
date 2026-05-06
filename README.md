@@ -44,6 +44,7 @@ The iOS app is the mobile face of that platform. It connects to the same product
 | **Profile** | User profile and account management | 🔴 |
 
 **Status Legend:**
+
 - 🟢 Finished
 - 🟡 Ongoing development
 - 🔴 Scheduled / Backlog
