@@ -28,6 +28,10 @@ struct CompositionRoot {
         RemoteOffersRepository(apiClient: authenticatedAPIClient)
     }
 
+    static var purchasesRepository: PurchasesRepository {
+        RemotePurchasesRepository(apiClient: authenticatedAPIClient)
+    }
+
     // MARK: - Cross-cutting Concerns
 
     static var settingsStorage: KeyValueStorage {

@@ -13,7 +13,7 @@ struct HomeScreen: View {
                 }
                 .tag(0)
 
-            PurchasesScreen()
+            PurchasesContainer()
                 .tabItem {
                     Label("Purchases", systemImage: "bag.fill")
                 }
